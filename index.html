@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Show Recommender | Find Your Next Binge</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --text: #2b2d42;
+            --text-light: #6c757d;
+            --background: #f8f9fa;
+            --error: #e63946;
+            --success: #2a9d8f;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 1rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        select, button {
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        select {
+            min-width: 250px;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        button:hover, button:focus {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.7;
+        }
+
+        #loading {
+            text-align: center;
+            margin: 2rem;
+            font-size: 1.2rem;
+            color: var(--primary);
+            display: none;
+        }
+
+        #error {
+            color: var(--error);
+            text-align: center;
+            margin: 1rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        #results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .show-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .show-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .show-poster {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+
+        .show-details {
+            padding: 1.25rem;
+        }
+
+        .show-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .show-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .show-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .genre-tag {
+            background: #e9ecef;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .selected-genre {
+            background: var(--primary);
+            color: white;
+        }
+
+        .show-summary {
+            font-size: 0.95rem;
+            color: var(--text);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .show-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .view-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .view-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .stream-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .stream-btn:hover {
+            background: #21867a;
+        }
+
+        .empty-state {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 2rem;
+            color: var(--text-light);
+        }
+
+        /* Ad Styles */
+        .ad-container {
+            margin: 20px auto;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px dashed #ccc;
+        }
+        
+        .header-ad {
+            width: 100%;
+            max-width: 728px;
+            min-height: 90px;
+        }
+        
+        .sidebar-ad {
+            width: 300px;
+            min-height: 250px;
+            float: right;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-ad {
+            width: 100%;
+            max-width: 970px;
+            min-height: 90px;
+            clear: both;
+        }
+        
+        .ad-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.25rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            select {
+                min-width: 100%;
+            }
+            
+            .show-poster {
+                height: 350px;
+            }
+
+            .sidebar-ad {
+                float: none;
+                width: 100%;
+                margin: 20px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+                border-radius: 0;
+            }
+            
+            .show-poster {
+                height: 300px;
+            }
+            
+            #results {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Ad -->
+        <div class="ad-container header-ad">
+            <div class="ad-label">Advertisement</div>
+            <div id="header-ad-slot">
+                <!-- Fallback Ad Content -->
+                <a href="https://example.com" target="_blank" rel="sponsored">
+                    <img src="https://via.placeholder.com/728x90?text=Your+Ad+Here" alt="Advertisement" style="max-width:100%">
+                </a>
+            </div>
+        </div>
+        
+        <header>
+            <h1>🍿 TV Show Recommender</h1>
+            <p class="tagline">Discover your next binge-worthy series</p>
+        </header>
+        
+        <div class="controls">
+            <select id="genre">
+                <option value="">-- Select Genre --</option>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Drama">Drama</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Horror">Horror</option>
+                <option value="Sci-Fi">Science Fiction</option>
+                <option value="Thriller">Thriller</option>
+            </select>
+            
+            <button id="recommend-btn">
+                <span>🎬 Find Shows</span>
+            </button>
+            <button id="random-btn">
+                <span>🎲 Surprise Me</span>
+            </button>
+        </div>
+        
+        <!-- Sidebar Ad -->
+        <div class="ad-container sidebar-ad">
+            <div class="ad-label">Advertisement</div>
+            <div id="sidebar-ad-slot">
+                <!-- Fallback Ad Content -->
+                <a href="https://example.com" target="_blank" rel="sponsored">
+                    <img src="https://via.placeholder.com/300x250?text=Your+Ad+Here" alt="Advertisement" style="max-width:100%">
+                </a>
+            </div>
+        </div>
+        
+        <div id="loading">
+            <div>✨ Searching for the perfect shows...</div>
+        </div>
+        <div id="error" role="alert"></div>
+        
+        <div id="results">
+            <div class="empty-state">
+                <h2>No shows selected yet</h2>
+                <p>Choose a genre and click "Find Shows"</p>
+            </div>
+        </div>
+        
+        <!-- Footer Ad -->
+        <div class="ad-container footer-ad">
+            <div class="ad-label">Advertisement</div>
+            <div id="footer-ad-slot">
+                <!-- Fallback Ad Content -->
+                <a href="https://example.com" target="_blank" rel="sponsored">
+                    <img src="https://via.placeholder.com/970x90?text=Your+Ad+Here" alt="Advertisement" style="max-width:100%">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const genreSelect = document.getElementById('genre');
+            const recommendBtn = document.getElementById('recommend-btn');
+            const randomBtn = document.getElementById('random-btn');
+            const loadingElement = document.getElementById('loading');
+            const errorElement = document.getElementById('error');
+            const resultsContainer = document.getElementById('results');
+
+            // Available genres for random selection
+            const availableGenres = Array.from(genreSelect.options)
+                .map(opt => opt.value)
+                .filter(val => val !== "");
+
+            // Initialize
+            loadingElement.style.display = 'none';
+            errorElement.style.display = 'none';
+
+            // Event listeners
+            recommendBtn.addEventListener('click', getRecommendations);
+            randomBtn.addEventListener('click', getRandomRecommendation);
+
+            async function getRecommendations() {
+                const genre = genreSelect.value;
+                
+                if (!genre) {
+                    showError('Please select a genre first!');
+                    return;
+                }
+
+                clearResults();
+                showLoading();
+                toggleButtons(true);
+
+                try {
+                    // First try exact genre match
+                    let shows = await fetchShowsByGenre(genre);
+                    
+                    // Filter to ensure the selected genre is actually in the show's genres
+                    shows = shows.filter(show => 
+                        show.genres && 
+                        show.genres.some(g => g.toLowerCase() === genre.toLowerCase())
+                    );
+
+                    if (shows.length === 0) {
+                        showEmptyState(`No shows found in ${genre} genre. Try another one!`);
+                        return;
+                    }
+
+                    displayResults(getRandomShows(shows, 6), genre);
+                } catch (error) {
+                    showError('Failed to load shows. Please try again later.');
+                    console.error(error);
+                } finally {
+                    hideLoading();
+                    toggleButtons(false);
+                }
+            }
+
+            function getRandomRecommendation() {
+                const randomGenre = availableGenres[Math.floor(Math.random() * availableGenres.length)];
+                genreSelect.value = randomGenre;
+                getRecommendations();
+            }
+
+            async function fetchShowsByGenre(genre) {
+                const response = await fetch(
+                    `https://api.tvmaze.com/shows?genres=${encodeURIComponent(genre)}`
+                );
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                return await response.json();
+            }
+
+            function getRandomShows(shows, count) {
+                const shuffled = [...shows];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled.slice(0, Math.min(count, shuffled.length));
+            }
+
+            function displayResults(shows, selectedGenre) {
+                resultsContainer.innerHTML = '';
+                
+                if (!shows || shows.length === 0) {
+                    showEmptyState("No shows to display");
+                    return;
+                }
+                
+                shows.forEach(show => {
+                    if (!show) return;
+                    
+                    const card = document.createElement('article');
+                    card.className = 'show-card';
+                    
+                    const posterUrl = show.image?.medium || 'https://via.placeholder.com/210x295?text=No+Poster';
+                    const year = show.premiered?.substring(0,4) || 'N/A';
+                    const rating = show.rating?.average ? `${show.rating.average}/10` : 'No rating';
+                    const summary = show.summary ? cleanSummary(show.summary) : 'Description not available.';
+                    
+                    card.innerHTML = `
+                        <img class="show-poster" 
+                             src="${posterUrl}" 
+                             alt="${show.name || 'TV Show'}" 
+                             loading="lazy"
+                             onerror="this.src='https://via.placeholder.com/210x295?text=No+Poster'">
+                        <div class="show-details">
+                            <h3 class="show-title">${show.name || 'Untitled Show'}</h3>
+                            <div class="show-genres">
+                                ${show.genres ? show.genres.map(genre => `
+                                    <span class="genre-tag ${genre === selectedGenre ? 'selected-genre' : ''}">
+                                        ${genre}
+                                    </span>
+                                `).join('') : ''}
+                            </div>
+                            <div class="show-meta">
+                                <span>⭐ ${rating}</span>
+                                <span>📅 ${year}</span>
+                            </div>
+                            <p class="show-summary">${summary}</p>
+                            <div class="show-actions">
+                                <a href="${show.url || '#'}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer" 
+                                   class="action-btn view-btn">
+                                   View Details
+                                </a>
+                                <a href="https://www.justwatch.com/search?q=${encodeURIComponent(show.name || '')}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="action-btn stream-btn">
+                                   Where to Watch
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(card);
+                });
+            }
+
+            function cleanSummary(text) {
+                if (!text) return '';
+                return text.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ');
+            }
+
+            function showEmptyState(message) {
+                resultsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <h2>${message || 'No content available'}</h2>
+                        <p>Try another genre or the "Surprise Me" button</p>
+                    </div>
+                `;
+            }
+
+            function showLoading() {
+                loadingElement.style.display = 'block';
+                errorElement.style.display = 'none';
+            }
+
+            function hideLoading() {
+                loadingElement.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorElement.textContent = `⚠️ ${message || 'An error occurred'}`;
+                errorElement.style.display = 'block';
+            }
+
+            function clearResults() {
+                resultsContainer.innerHTML = '';
+                errorElement.style.display = 'none';
+            }
+
+            function toggleButtons(disabled) {
+                recommendBtn.disabled = disabled;
+                randomBtn.disabled = disabled;
+            }
+
+            // Initialize ads after content loads
+            setTimeout(() => {
+                if (typeof adsbygoogle !== 'undefined') {
+                    adsbygoogle.push({});
+                }
+            }, 1000);
+        });
+    </script>
+
+    <!-- AdSense Script (Replace with your actual publisher ID) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+            crossorigin="anonymous"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-YOUR_PUBLISHER_ID",
+            enable_page_level_ads: false,
+            overlays: {bottom: true}
+        });
+    </script>
+</body>
+</html>
