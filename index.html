@@ -6,18 +6,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TV Show Recommender | Find Your Next Binge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Your existing CSS remains unchanged */
         :root {
             --primary: #4361ee;
             --primary-dark: #3a56d4;
+            --secondary: #7209b7;
             --text: #2b2d42;
             --text-light: #6c757d;
             --background: #f8f9fa;
+            --card-bg: #ffffff;
             --error: #e63946;
             --success: #2a9d8f;
-            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --warning: #f9c74f;
+            --card-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
             --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #5e72e4;
+            --primary-dark: #4c60c9;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --background: #121212;
+            --card-bg: #1e1e1e;
+            --card-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
         * {
@@ -33,31 +46,96 @@
             line-height: 1.6;
             padding: 1rem;
             min-height: 100vh;
+            transition: var(--transition);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: var(--card-bg);
             padding: 2rem;
-            border-radius: 12px;
+            border-radius: 16px;
             box-shadow: var(--card-shadow);
+            transition: var(--transition);
         }
 
         header {
             text-align: center;
             margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-dark);
+            transform: rotate(30deg);
         }
 
         h1 {
             color: var(--primary);
             font-size: clamp(1.8rem, 4vw, 2.5rem);
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .tagline {
             color: var(--text-light);
             font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px 0 0 8px;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .search-box button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.25rem;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-box button:hover {
+            background: var(--primary-dark);
         }
 
         .controls {
@@ -65,7 +143,7 @@
             flex-wrap: wrap;
             gap: 1rem;
             justify-content: center;
-            margin: 2rem 0;
+            margin: 1.5rem 0;
         }
 
         select, button {
@@ -78,7 +156,8 @@
 
         select {
             min-width: 250px;
-            background: white;
+            background: var(--card-bg);
+            color: var(--text);
             cursor: pointer;
         }
 
@@ -88,7 +167,7 @@
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
 
-        button {
+        .btn {
             background: var(--primary);
             color: white;
             font-weight: 600;
@@ -100,12 +179,20 @@
             white-space: nowrap;
         }
 
-        button:hover, button:focus {
+        .btn:hover, .btn:focus {
             background: var(--primary-dark);
             transform: translateY(-2px);
         }
 
-        button:disabled {
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #5e17a0;
+        }
+
+        .btn:disabled {
             background: #adb5bd;
             cursor: not-allowed;
             transform: none;
@@ -120,12 +207,32 @@
             display: none;
         }
 
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--primary);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         #error {
             color: var(--error);
             text-align: center;
             margin: 1rem;
             font-weight: 600;
             display: none;
+            padding: 1rem;
+            background: rgba(230, 57, 70, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--error);
         }
 
         #results {
@@ -136,34 +243,53 @@
         }
 
         .show-card {
-            background: white;
-            border-radius: 10px;
+            background: var(--card-bg);
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
+            position: relative;
         }
 
         .show-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
         }
 
         .show-poster {
             width: 100%;
-            height: 400px;
+            height: 380px;
             object-fit: cover;
             border-bottom: 1px solid #eee;
         }
 
+        .show-rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.35rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
         .show-details {
-            padding: 1.25rem;
+            padding: 1.5rem;
         }
 
         .show-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             color: var(--text);
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .show-meta {
@@ -183,9 +309,10 @@
 
         .genre-tag {
             background: #e9ecef;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
+            padding: 0.35rem 0.65rem;
+            border-radius: 20px;
             font-size: 0.75rem;
+            font-weight: 500;
         }
 
         .selected-genre {
@@ -200,7 +327,7 @@
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             line-height: 1.5;
         }
 
@@ -210,13 +337,17 @@
         }
 
         .action-btn {
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
+            padding: 0.6rem 0.85rem;
+            border-radius: 8px;
             font-size: 0.85rem;
             flex: 1;
             text-align: center;
             text-decoration: none;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
         }
 
         .view-btn {
@@ -240,18 +371,29 @@
         .empty-state {
             text-align: center;
             grid-column: 1 / -1;
-            padding: 2rem;
+            padding: 3rem;
             color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
         }
 
         /* Ad Styles */
         .ad-container {
-            margin: 20px auto;
+            margin: 25px auto;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 8px;
             text-align: center;
             border: 1px dashed #ccc;
+        }
+        
+        .dark-mode .ad-container {
+            background: #2a2a2a;
+            border-color: #555;
         }
         
         .header-ad {
@@ -273,9 +415,13 @@
             margin-bottom: 5px;
         }
 
+        .dark-mode .ad-label {
+            color: #aaa;
+        }
+
         @media (max-width: 768px) {
             .container {
-                padding: 1.25rem;
+                padding: 1.5rem;
             }
             
             .controls {
@@ -288,7 +434,12 @@
             }
             
             .show-poster {
-                height: 350px;
+                height: 340px;
+            }
+            
+            .theme-toggle {
+                position: relative;
+                margin: 0 auto 1rem;
             }
         }
 
@@ -299,7 +450,7 @@
             
             .container {
                 padding: 1rem;
-                border-radius: 0;
+                border-radius: 12px;
             }
             
             .show-poster {
@@ -308,6 +459,15 @@
             
             #results {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .show-details {
+                padding: 1.25rem;
+            }
+            
+            .show-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -326,8 +486,16 @@
         </div>
         
         <header>
-            <h1>🍿 TV Show Recommender</h1>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <h1><i class="fas fa-tv"></i> TV Show Recommender</h1>
             <p class="tagline">Discover your next binge-worthy series</p>
+            
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search for a TV show...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
         </header>
         
         <div class="controls">
@@ -341,25 +509,30 @@
                 <option value="Horror">Horror</option>
                 <option value="Science-Fiction">Science Fiction</option>
                 <option value="Thriller">Thriller</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Crime">Crime</option>
             </select>
             
-            <button id="recommend-btn">
-                <span>🎬 Find Shows</span>
+            <button id="recommend-btn" class="btn">
+                <i class="fas fa-search"></i> Find Shows
             </button>
-            <button id="random-btn">
-                <span>🎲 Surprise Me</span>
+            <button id="random-btn" class="btn btn-secondary">
+                <i class="fas fa-random"></i> Surprise Me
             </button>
         </div>
         
         <div id="loading">
-            <div>✨ Searching for the perfect shows...</div>
+            <div class="loader"></div>
+            <div>Searching for the perfect shows...</div>
         </div>
         <div id="error" role="alert"></div>
         
         <div id="results">
             <div class="empty-state">
+                <i class="fas fa-tv"></i>
                 <h2>No shows selected yet</h2>
-                <p>Choose a genre and click "Find Shows"</p>
+                <p>Choose a genre and click "Find Shows" or search for a specific show</p>
             </div>
         </div>
         
@@ -380,17 +553,21 @@
             const genreSelect = document.getElementById('genre');
             const recommendBtn = document.getElementById('recommend-btn');
             const randomBtn = document.getElementById('random-btn');
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
             const loadingElement = document.getElementById('loading');
             const errorElement = document.getElementById('error');
             const resultsContainer = document.getElementById('results');
+            const themeToggle = document.getElementById('theme-toggle');
             
-            // Cache for storing shows by genre to reduce API calls
-            const showsCache = new Map();
-
             // Available genres for random selection
             const availableGenres = Array.from(genreSelect.options)
                 .map(opt => opt.value)
                 .filter(val => val !== "");
+            
+            // Cache for storing shows by genre to reduce API calls
+            const showsCache = new Map();
+            let allShows = [];
 
             // Initialize
             loadingElement.style.display = 'none';
@@ -399,6 +576,23 @@
             // Event listeners
             recommendBtn.addEventListener('click', getRecommendations);
             randomBtn.addEventListener('click', getRandomRecommendation);
+            searchBtn.addEventListener('click', searchShows);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchShows();
+            });
+            
+            themeToggle.addEventListener('click', toggleTheme);
+
+            // Check for saved theme preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            // Preload all shows on initial load
+            fetchAllShows().then(shows => {
+                allShows = shows;
+            });
 
             async function getRecommendations() {
                 const genre = genreSelect.value;
@@ -419,10 +613,8 @@
                     if (showsCache.has(genre)) {
                         shows = showsCache.get(genre);
                     } else {
-                        // Fetch all shows and filter by genre
-                        shows = await fetchAllShows();
                         // Filter shows by the selected genre
-                        shows = shows.filter(show => 
+                        shows = allShows.filter(show => 
                             show.genres && 
                             show.genres.some(g => 
                                 g.toLowerCase().replace(/\s+/g, '-') === genre.toLowerCase()
@@ -437,9 +629,42 @@
                         return;
                     }
 
-                    displayResults(getRandomShows(shows, 6), genre);
+                    displayResults(getRandomShows(shows, 9), genre);
                 } catch (error) {
                     showError('Failed to load shows. Please try again later.');
+                    console.error('Error:', error);
+                } finally {
+                    hideLoading();
+                    toggleButtons(false);
+                }
+            }
+
+            function searchShows() {
+                const query = searchInput.value.trim();
+                
+                if (!query) {
+                    showError('Please enter a search term!');
+                    return;
+                }
+
+                clearResults();
+                showLoading();
+                toggleButtons(true);
+
+                try {
+                    // Filter shows based on search query
+                    const filteredShows = allShows.filter(show => 
+                        show.name && show.name.toLowerCase().includes(query.toLowerCase())
+                    );
+
+                    if (filteredShows.length === 0) {
+                        showEmptyState(`No shows found for "${query}". Try a different search term.`);
+                        return;
+                    }
+
+                    displayResults(filteredShows.slice(0, 12), 'Search Results');
+                } catch (error) {
+                    showError('Failed to search shows. Please try again later.');
                     console.error('Error:', error);
                 } finally {
                     hideLoading();
@@ -464,7 +689,8 @@
                     return await response.json();
                 } catch (error) {
                     console.error('Failed to fetch shows:', error);
-                    throw error;
+                    showError('Failed to load shows. Please check your connection and try again.');
+                    return [];
                 }
             }
 
@@ -477,13 +703,21 @@
                 return shuffled.slice(0, Math.min(count, shuffled.length));
             }
 
-            function displayResults(shows, selectedGenre) {
+            function displayResults(shows, title) {
                 resultsContainer.innerHTML = '';
                 
                 if (!shows || shows.length === 0) {
                     showEmptyState("No shows to display");
                     return;
                 }
+                
+                // Add results title
+                const resultsTitle = document.createElement('h2');
+                resultsTitle.style.gridColumn = '1 / -1';
+                resultsTitle.style.marginBottom = '1rem';
+                resultsTitle.style.color = 'var(--text)';
+                resultsTitle.textContent = `${title} (${shows.length} results)`;
+                resultsContainer.appendChild(resultsTitle);
                 
                 shows.forEach(show => {
                     if (!show) return;
@@ -493,7 +727,7 @@
                     
                     const posterUrl = show.image?.medium || 'https://via.placeholder.com/210x295?text=No+Poster';
                     const year = show.premiered?.substring(0,4) || 'N/A';
-                    const rating = show.rating?.average ? `${show.rating.average}/10` : 'No rating';
+                    const rating = show.rating?.average ? show.rating.average.toFixed(1) : 'N/A';
                     const summary = show.summary ? cleanSummary(show.summary) : 'Description not available.';
                     
                     card.innerHTML = `
@@ -502,18 +736,19 @@
                              alt="${show.name || 'TV Show'}" 
                              loading="lazy"
                              onerror="this.src='https://via.placeholder.com/210x295?text=No+Poster'">
+                        ${rating !== 'N/A' ? `<div class="show-rating"><i class="fas fa-star"></i> ${rating}</div>` : ''}
                         <div class="show-details">
                             <h3 class="show-title">${show.name || 'Untitled Show'}</h3>
+                            <div class="show-meta">
+                                <span><i class="fas fa-calendar-alt"></i> ${year}</span>
+                                <span><i class="fas fa-film"></i> ${show.type || 'N/A'}</span>
+                            </div>
                             <div class="show-genres">
                                 ${show.genres ? show.genres.map(genre => `
-                                    <span class="genre-tag ${genre.toLowerCase().replace(/\s+/g, '-') === selectedGenre.toLowerCase() ? 'selected-genre' : ''}">
+                                    <span class="genre-tag">
                                         ${genre}
                                     </span>
-                                `).join('') : ''}
-                            </div>
-                            <div class="show-meta">
-                                <span>⭐ ${rating}</span>
-                                <span>📅 ${year}</span>
+                                `).join('') : '<span class="genre-tag">No genres</span>'}
                             </div>
                             <p class="show-summary">${summary}</p>
                             <div class="show-actions">
@@ -521,13 +756,13 @@
                                    target="_blank" 
                                    rel="noopener noreferrer" 
                                    class="action-btn view-btn">
-                                   View Details
+                                   <i class="fas fa-info-circle"></i> Details
                                 </a>
                                 <a href="https://www.justwatch.com/search?q=${encodeURIComponent(show.name || '')}" 
                                    target="_blank" 
                                    rel="noopener noreferrer"
                                    class="action-btn stream-btn">
-                                   Where to Watch
+                                   <i class="fas fa-play"></i> Watch
                                 </a>
                             </div>
                         </div>
@@ -544,6 +779,7 @@
             function showEmptyState(message) {
                 resultsContainer.innerHTML = `
                     <div class="empty-state">
+                        <i class="fas fa-tv"></i>
                         <h2>${message || 'No content available'}</h2>
                         <p>Try another genre or the "Surprise Me" button</p>
                     </div>
@@ -560,7 +796,7 @@
             }
 
             function showError(message) {
-                errorElement.textContent = `⚠️ ${message || 'An error occurred'}`;
+                errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message || 'An error occurred'}`;
                 errorElement.style.display = 'block';
             }
 
@@ -572,6 +808,18 @@
             function toggleButtons(disabled) {
                 recommendBtn.disabled = disabled;
                 randomBtn.disabled = disabled;
+                searchBtn.disabled = disabled;
+            }
+            
+            function toggleTheme() {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('darkMode', 'enabled');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    localStorage.setItem('darkMode', 'disabled');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
             }
 
             // Initialize ads after content loads
@@ -583,7 +831,7 @@
         });
     </script>
 
-    <!-- AdSense Script - Updated with your publisher ID -->
+    <!-- AdSense Script with your actual publisher ID -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7381421031784616"
             crossorigin="anonymous"></script>
     <script>
