@@ -505,7 +505,7 @@
                 transform: scale(1.5);
                 opacity: 0;
             }
-            100% {
+           100% {
                 transform: scale(1);
                 opacity: 0.7;
             }
@@ -544,38 +544,6 @@
             background: rgba(255, 197, 61, 0.2);
             color: var(--accent);
             border-color: var(--accent);
-        }
-        
-        /* Country selector */
-        .country-selector {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        
-        .country-btn {
-            padding: 8px 16px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            background: transparent;
-            color: var(--light);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .country-btn.active {
-            background: rgba(0, 206, 203, 0.2);
-            border-color: var(--secondary);
-            color: var(--secondary);
-        }
-        
-        .country-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.1);
         }
         
         /* Accessibility improvements */
@@ -792,15 +760,6 @@
                 font-size: 0.9rem;
             }
             
-            .country-selector {
-                gap: 8px;
-            }
-            
-            .country-btn {
-                padding: 6px 12px;
-                font-size: 0.9rem;
-            }
-            
             /* NEW: Mobile adjustments */
             .autocomplete {
                 position: relative;
@@ -826,15 +785,6 @@
             .card {
                 max-width: 320px;
                 margin: 0 auto;
-            }
-            
-            .country-selector {
-                gap: 5px;
-            }
-            
-            .country-btn {
-                padding: 5px 10px;
-                font-size: 0.8rem;
             }
         }
     </style>
@@ -890,27 +840,6 @@
             </div>
         </div>
         
-        <div class="country-selector">
-            <button class="country-btn active" data-country="all" aria-pressed="true">
-                <i class="fas fa-globe"></i> All Countries
-            </button>
-            <button class="country-btn" data-country="US" aria-pressed="false">
-                <i class="fas fa-flag-usa"></i> United States
-            </button>
-            <button class="country-btn" data-country="IN" aria-pressed="false">
-                <i class="fas fa-flag"></i> India
-            </button>
-            <button class="country-btn" data-country="CN" aria-pressed="false">
-                <i class="fas fa-flag"></i> China
-            </button>
-            <button class="country-btn" data-country="JP" aria-pressed="false">
-                <i class="fas fa-flag"></i> Japan
-            </button>
-            <button class="country-btn" data-country="KR" aria-pressed="false">
-                <i class="fas fa-flag"></i> South Korea
-            </button>
-        </div>
-        
         <div class="recommendation-bubbles">
             <div class="bubble" data-search="popular" tabindex="0" role="button">🔥 Popular Now</div>
             <div class="bubble" data-search="comedy" tabindex="0" role="button">😂 Comedy</div>
@@ -960,6 +889,7 @@
         
         <footer>
             <p>PickMyBinge.com &copy; 2023 - Find Your Next Favorite Binge</p>
+            <p class="api-source">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
         </footer>
     </div>
 
@@ -978,7 +908,6 @@
             const instructions = document.getElementById('instructions');
             const noResultsElement = document.getElementById('no-results');
             const filterButtons = document.querySelectorAll('.filter-btn');
-            const countryButtons = document.querySelectorAll('.country-btn');
             const tvmazeStatus = document.getElementById('tvmaze-status');
             const moviesapiStatus = document.getElementById('moviesapi-status');
             const bubbles = document.querySelectorAll('.bubble');
@@ -1007,55 +936,6 @@
                 'thriller': {tvmaze: 'thriller', tmdb: '53'}
             };
             
-            // Country mappings for API calls
-            const countryMappings = {
-                'all': {tvmaze: '', tmdb: ''},
-                'US': {tvmaze: 'US', tmdb: 'US'},
-                'IN': {tvmaze: 'IN', tmdb: 'IN'},
-                'CN': {tvmaze: 'CN', tmdb: 'CN'},
-                'JP': {tvmaze: 'JP', tmdb: 'JP'},
-                'KR': {tvmaze: 'KR', tmdb: 'KR'}
-            };
-            
-            // Country display names
-            const countryNames = {
-                'all': 'All Countries',
-                'US': 'United States',
-                'IN': 'India',
-                'CN': 'China',
-                'JP': 'Japan',
-                'KR': 'South Korea'
-            };
-            
-            // Country-specific content samples
-            const countryContent = {
-                'US': [
-                    {title: "Stranger Things", type: "tv", year: "2016", poster: "https://static.tvmaze.com/uploads/images/medium_portrait/434/1085863.jpg", rating: 8.7, plot: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.", country: "US"},
-                    {title: "The Avengers", type: "movie", year: "2012", poster: "https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX1000_.jpg", rating: 8.0, plot: "Earth's mightiest heroes must come together and learn to fight as a team to stop the mischievous Loki and his alien army from enslaving humanity.", country: "US"},
-                    {title: "Breaking Bad", type: "tv", year: "2008", poster: "https://m.media-amazon.com/images/M/MV5BYmQ4YWMxYjUtNjZmYi00MDQ1LWFjMjMtNjA5ZDdiYjdiODU5XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_FMjpg_UX1000_.jpg", rating: 9.5, plot: "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's future.", country: "US"}
-                ],
-                'IN': [
-                    {title: "RRR", type: "movie", year: "2022", poster: "https://m.media-amazon.com/images/M/MV5BODUwNDNjYzctODUxNy00ZTA2LWIyYTEtMDc5Y2E5ZjBmNTMzXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_FMjpg_UX1000_.jpg", rating: 7.9, plot: "A fictitious story about two legendary revolutionaries and their journey away from home before they started fighting for their country in the 1920s.", country: "IN"},
-                    {title: "3 Idiots", type: "movie", year: "2009", poster: "https://m.media-amazon.com/images/M/MV5BNTkyOGVjMGEtNmQzZi00NzFlLTlhOWQtODYyMDc2ZGJmYzFhXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX1000_.jpg", rating: 8.4, plot: "Two friends are searching for their long lost companion. They revisit their college days and recall the memories of their friend who inspired them to think differently, even as the rest of the world called them idiots.", country: "IN"},
-                    {title: "Sacred Games", type: "tv", year: "2018", poster: "https://m.media-amazon.com/images/M/MV5BMjJlMjJlMzYtNmU5Yy00N2MwLWJmMjEtNWUwZWIyMGViZDgyXkEyXkFqcGdeQXVyOTAzMTc2MjA@._V1_FMjpg_UX1000_.jpg", rating: 8.6, plot: "A link in their pasts leads an honest cop to a fugitive gang boss, whose cryptic warning spurs the officer on a quest to save Mumbai from cataclysm.", country: "IN"}
-                ],
-                'CN': [
-                    {title: "Crouching Tiger, Hidden Dragon", type: "movie", year: "2000", poster: "https://m.media-amazon.com/images/M/MV5BNDdhMzMxOTctNDMyNS00NTZmLTljNWEtNTc4MDBmZTYxY2NmXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX1000_.jpg", rating: 7.8, plot: "A young Chinese warrior steals a sword from a famed swordsman and then escapes into a world of romantic adventure with a mysterious man in the frontier of the nation.", country: "CN"},
-                    {title: "The Wandering Earth", type: "movie", year: "2019", poster: "https://m.media-amazon.com/images/M/MV5BNWI2ZmU3MTgtMjkyOC00YzVhLWE0ZTMtZTRlMWM4NGM4ZmY5XkEyXkFqcGdeQXVyNjU2ODM5MjU@._V1_FMjpg_UX1000_.jpg", rating: 6.4, plot: "As the sun is dying out, people all around the world build giant planet thrusters to move Earth out of its orbit and sail to a new star system.", country: "CN"},
-                    {title: "Nirvana in Fire", type: "tv", year: "2015", poster: "https://m.media-amazon.com/images/M/MV5BYzU2OTQ0OWItNjE5Mi00MWJhLWEzNTAtMDA5YzBmZGM4YzVhXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_FMjpg_UX1000_.jpg", rating: 9.4, plot: "A story of intrigue and power in ancient China where a severely poisoned but brilliant strategist seeks to redress a grievous wrong done to his family and army.", country: "CN"}
-                ],
-                'JP': [
-                    {title: "Spirited Away", type: "movie", year: "2001", poster: "https://m.media-amazon.com/images/M/MV5BMjlmZmI5MDctNDE2YS00YWE0LWE5ZWItZDBhYWQ0NTcxNWRhXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX1000_.jpg", rating: 8.6, plot: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.", country: "JP"},
-                    {title: "Your Name", type: "movie", year: "2016", poster: "https://m.media-amazon.com/images/M/MV5BODRmZDVmNzUtZDA4ZC00NjhkLWI2M2UtN2M0ZDIzNDcxYThjL2ltYWdlXkEyXkFqcGdeQXVyNTk0MzMzODA@._V1_FMjpg_UX1000_.jpg", rating: 8.4, plot: "Two teenagers share a profound, magical connection upon discovering they are swapping bodies. Things manage to become even more complicated when the boy and girl decide to meet in person.", country: "JP"},
-                    {title: "Attack on Titan", type: "tv", year: "2013", poster: "https://m.media-amazon.com/images/M/MV5BMTY5ODk1NzUyMl5BMl5BanBnXkFtZTgwMjUyNzEyMTE@._V1_FMjpg_UX1000_.jpg", rating: 9.0, plot: "After his hometown is destroyed and his mother is killed, young Eren Jaeger vows to cleanse the earth of the giant humanoid Titans that have brought humanity to the brink of extinction.", country: "JP"}
-                ],
-                'KR': [
-                    {title: "Parasite", type: "movie", year: "2019", poster: "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_FMjpg_UX1000_.jpg", rating: 8.6, plot: "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.", country: "KR"},
-                    {title: "Squid Game", type: "tv", year: "2021", poster: "https://m.media-amazon.com/images/M/MV5BYWE3MDVkN2EtNjQ5MS00ZDQ4LTliNzYtMjc2YWMzMDEwMTA3XkEyXkFqcGdeQXVyMTEzMTI1Mjk3@._V1_FMjpg_UX1000_.jpg", rating: 8.0, plot: "Hundreds of cash-strapped players accept a strange invitation to compete in children's games. Inside, a tempting prize awaits with deadly high stakes.", country: "KR"},
-                    {title: "Crash Landing on You", type: "tv", year: "2019", poster: "https://m.media-amazon.com/images/M/MV5BMDc4ZDM1MzUtOGU0ZS00ODk0LThlY2ItNDk0ZGI0NTkyN2M2XkEyXkFqcGdeQXVyNDU5MTA5NzU@._V1_FMjpg_UX1000_.jpg", rating: 8.7, plot: "A paragliding mishap drops a South Korean heiress in North Korea - and into the life of an army officer, who decides he will help her hide.", country: "KR"}
-                ]
-            };
-            
             // NEW: Autocomplete suggestions
             const autocompleteSuggestions = [
                 "Comedy movies",
@@ -1082,11 +962,12 @@
             
             let currentResults = [];
             let activeFilter = 'all';
-            let activeCountry = 'all';
             let usedIds = new Set(); // Track used IDs to prevent duplicates
             let savedItems = JSON.parse(localStorage.getItem('savedBingeItems')) || [];
             let currentPage = 1;
             let currentQuery = '';
+            let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+            let recentlyShownItems = JSON.parse(localStorage.getItem('recentlyShownItems')) || [];
             
             // Show toast notification
             function showToast(message, type = 'success') {
@@ -1219,161 +1100,160 @@
                     
                     // Get genre mapping
                     const genre = genreMappings[query] || {};
-                    // Get country mapping
-                    const country = countryMappings[activeCountry] || {};
                     
-                    // If a specific country is selected, use sample data for that country
-                    if (activeCountry !== 'all' && countryContent[activeCountry]) {
-                        for (const item of countryContent[activeCountry]) {
-                            if (!usedIds.has(`${item.type}-${item.title}`)) {
-                                currentResults.push({
-                                    type: 'sample',
-                                    data: {
-                                        id: `${item.type}-${item.title}`,
-                                        title: item.title,
-                                        year: item.year,
-                                        poster: item.poster,
-                                        rating: item.rating,
-                                        plot: item.plot,
-                                        type: item.type,
-                                        country: item.country,
-                                        bingeScore: Math.floor(Math.random() * 20) + 75
-                                    }
-                                });
-                                usedIds.add(`${item.type}-${item.title}`);
-                            }
-                        }
-                        showToast(`Showing content from ${countryNames[activeCountry]}`, 'success');
-                    } else {
-                        // Search TVmaze API for TV shows
-                        try {
-                            tvmazeStatus.className = 'status-dot status-loading';
-                            let tvmazeUrl = `${TVMAZE_API_URL}shows`;
-                            const params = [];
-                            
-                            if (genre.tvmaze) {
-                                params.push(`genres=${genre.tvmaze}`);
-                            }
-                            
-                            if (country.tvmaze && country.tvmaze !== '') {
-                                params.push(`country=${country.tvmaze}`);
-                            }
-                            
-                            if (params.length > 0) {
-                                tvmazeUrl += `?${params.join('&')}`;
-                            }
-                            
-                            const tvmazeResponse = await fetch(tvmazeUrl);
-                            if (tvmazeResponse.ok) {
-                                const tvmazeData = await tvmazeResponse.json();
-                                
-                                // Process TVmaze results
-                                if (tvmazeData && tvmazeData.length > 0) {
-                                    // Get random shows
-                                    const randomShows = getRandomItems(tvmazeData, 6);
-                                    
-                                    for (const show of randomShows) {
-                                        if (!usedIds.has(`tv-${show.id}`)) {
-                                            currentResults.push({
-                                                type: 'tvmaze',
-                                                data: {
-                                                    id: `tv-${show.id}`,
-                                                    title: show.name,
-                                                    year: show.premiered ? new Date(show.premiered).getFullYear() : 'N/A',
-                                                    endYear: show.ended ? new Date(show.ended).getFullYear() : null,
-                                                    poster: show.image ? show.image.medium : PLACEHOLDER_IMAGE,
-                                                    rating: show.rating ? show.rating.average : 'N/A',
-                                                    plot: show.summary ? show.summary.replace(/<[^>]*>/g, '') : 'No description available',
-                                                    type: 'tv',
-                                                    country: show.network ? show.network.country.code : 'Unknown',
-                                                    bingeScore: Math.floor(Math.random() * 20) + 75 // Random binge score between 75-95
-                                                }
-                                            });
-                                            usedIds.add(`tv-${show.id}`);
-                                        }
-                                    }
-                                    tvmazeStatus.className = 'status-dot status-online';
-                                    showToast(`Found ${randomShows.length} TV shows`, 'success');
-                                } else {
-                                    console.log('No results from TVmaze');
-                                    tvmazeStatus.className = 'status-dot status-offline';
-                                }
-                            } else {
-                                throw new Error('TVmaze API error');
-                            }
-                        } catch (tvmazeError) {
-                            console.error('TVmaze API error:', tvmazeError);
-                            tvmazeStatus.className = 'status-dot status-offline';
-                            showToast('TVmaze API is temporarily unavailable', 'error');
+                    // Search TVmaze API for TV shows
+                    try {
+                        tvmazeStatus.className = 'status-dot status-loading';
+                        let tvmazeUrl = `${TVMAZE_API_URL}shows`;
+                        const params = [];
+                        
+                        if (genre.tvmaze) {
+                            params.push(`genres=${genre.tvmaze}`);
                         }
                         
-                        // Search for movies using TMDB API
-                        try {
-                            moviesapiStatus.className = 'status-dot status-loading';
-                            let moviesUrl = `${TMDB_API_URL}/discover/movie?api_key=${TMDB_API_KEY}&page=${page}`;
-                            
-                            if (genre.tmdb) {
-                                moviesUrl += `&with_genres=${genre.tmdb}`;
-                            }
-                            
-                            if (country.tmdb && country.tmdb !== '') {
-                                moviesUrl += `&region=${country.tmdb}`;
-                            }
-                            
-                            const moviesResponse = await fetch(moviesUrl);
-                            if (moviesResponse.ok) {
-                                const moviesData = await moviesResponse.json();
-                                
-                                // Process movies results
-                                if (moviesData && moviesData.results && moviesData.results.length > 0) {
-                                    for (const item of moviesData.results.slice(0, 6)) {
-                                        if (!usedIds.has(`movie-${item.id}`)) {
-                                            currentResults.push({
-                                                type: 'tmdb',
-                                                data: {
-                                                    id: `movie-${item.id}`,
-                                                    title: item.title,
-                                                    year: item.release_date ? new Date(item.release_date).getFullYear() : 'N/A',
-                                                    poster: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : PLACEHOLDER_IMAGE,
-                                                    rating: item.vote_average ? item.vote_average : 'N/A',
-                                                    plot: item.overview ? item.overview : 'No description available',
-                                                    type: 'movie',
-                                                    country: item.original_language ? item.original_language.toUpperCase() : 'Unknown',
-                                                    bingeScore: Math.floor(Math.random() * 20) + 75 // Random binge score between 75-95
-                                                }
-                                            });
-                                            usedIds.add(`movie-${item.id}`);
-                                        }
-                                    }
-                                    moviesapiStatus.className = 'status-dot status-online';
-                                    
-                                    // Show load more button if there are more pages
-                                    if (moviesData.total_pages > page) {
-                                        loadMoreBtn.style.display = 'block';
-                                    } else {
-                                        loadMoreBtn.style.display = 'none';
-                                    }
-                                    
-                                    showToast(`Found ${moviesData.results.length} movies`, 'success');
-                                } else {
-                                    console.log('No results from TMDB API');
-                                    moviesapiStatus.className = 'status-dot status-offline';
-                                    loadMoreBtn.style.display = 'none';
-                                }
-                            } else {
-                                throw new Error('TMDB API error');
-                            }
-                        } catch (moviesError) {
-                            console.error('TMDB API error:', moviesError);
-                            moviesapiStatus.className = 'status-dot status-offline';
-                            loadMoreBtn.style.display = 'none';
-                            showToast('Movies API is temporarily unavailable', 'error');
+                        if (params.length > 0) {
+                            tvmazeUrl += `?${params.join('&')}`;
                         }
+                        
+                        const tvmazeResponse = await fetch(tvmazeUrl);
+                        if (tvmazeResponse.ok) {
+                            const tvmazeData = await tvmazeResponse.json();
+                            
+                            // Process TVmaze results
+                            if (tvmazeData && tvmazeData.length > 0) {
+                                // Get random shows, filtering out recently shown ones
+                                const availableShows = tvmazeData.filter(show => 
+                                    !recentlyShownItems.includes(`tv-${show.id}`)
+                                );
+                                
+                                // If we don't have enough shows, reset the recently shown list
+                                if (availableShows.length < 6) {
+                                    recentlyShownItems = recentlyShownItems.filter(id => !id.startsWith('tv-'));
+                                    showToast('Resetting TV show history to show more variety', 'success');
+                                }
+                                
+                                const randomShows = getRandomItems(availableShows.length > 0 ? availableShows : tvmazeData, 6);
+                                
+                                for (const show of randomShows) {
+                                    if (!usedIds.has(`tv-${show.id}`)) {
+                                        currentResults.push({
+                                            type: 'tvmaze',
+                                            data: {
+                                                id: `tv-${show.id}`,
+                                                title: show.name,
+                                                year: show.premiered ? new Date(show.premiered).getFullYear() : 'N/A',
+                                                endYear: show.ended ? new Date(show.ended).getFullYear() : null,
+                                                poster: show.image ? show.image.medium : PLACEHOLDER_IMAGE,
+                                                rating: show.rating ? show.rating.average : 'N/A',
+                                                plot: show.summary ? show.summary.replace(/<[^>]*>/g, '') : 'No description available',
+                                                type: 'tv',
+                                                country: show.network ? show.network.country.code : 'Unknown',
+                                                bingeScore: Math.floor(Math.random() * 20) + 75 // Random binge score between 75-95
+                                            }
+                                        });
+                                        usedIds.add(`tv-${show.id}`);
+                                        recentlyShownItems.push(`tv-${show.id}`);
+                                    }
+                                }
+                                tvmazeStatus.className = 'status-dot status-online';
+                                showToast(`Found ${randomShows.length} TV shows`, 'success');
+                            } else {
+                                console.log('No results from TVmaze');
+                                tvmazeStatus.className = 'status-dot status-offline';
+                            }
+                        } else {
+                            throw new Error('TVmaze API error');
+                        }
+                    } catch (tvmazeError) {
+                        console.error('TVmaze API error:', tvmazeError);
+                        tvmazeStatus.className = 'status-dot status-offline';
+                        showToast('TVmaze API is temporarily unavailable', 'error');
                     }
+                    
+                    // Search for movies using TMDB API - get completely random movies
+                    try {
+                        moviesapiStatus.className = 'status-dot status-loading';
+                        
+                        // Get a random page to ensure variety
+                        const randomPage = Math.floor(Math.random() * 100) + 1;
+                        let moviesUrl = `${TMDB_API_URL}/discover/movie?api_key=${TMDB_API_KEY}&page=${randomPage}`;
+                        
+                        if (genre.tmdb) {
+                            moviesUrl += `&with_genres=${genre.tmdb}`;
+                        }
+                        
+                        // Sort by popularity to get a mix of ratings
+                        moviesUrl += '&sort_by=popularity.desc';
+                        
+                        const moviesResponse = await fetch(moviesUrl);
+                        if (moviesResponse.ok) {
+                            const moviesData = await moviesResponse.json();
+                            
+                            // Process movies results
+                            if (moviesData && moviesData.results && moviesData.results.length > 0) {
+                                // Filter out recently shown movies
+                                const availableMovies = moviesData.results.filter(movie => 
+                                    !recentlyShownItems.includes(`movie-${movie.id}`)
+                                );
+                                
+                                // If we don't have enough movies, reset the recently shown list
+                                if (availableMovies.length < 6) {
+                                    recentlyShownItems = recentlyShownItems.filter(id => !id.startsWith('movie-'));
+                                    showToast('Resetting movie history to show more variety', 'success');
+                                }
+                                
+                                const moviesToShow = availableMovies.length > 0 ? availableMovies : moviesData.results;
+                                
+                                for (const item of getRandomItems(moviesToShow, 6)) {
+                                    if (!usedIds.has(`movie-${item.id}`)) {
+                                        currentResults.push({
+                                            type: 'tmdb',
+                                            data: {
+                                                id: `movie-${item.id}`,
+                                                title: item.title,
+                                                year: item.release_date ? new Date(item.release_date).getFullYear() : 'N/A',
+                                                poster: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : PLACEHOLDER_IMAGE,
+                                                rating: item.vote_average ? item.vote_average : 'N/A',
+                                                plot: item.overview ? item.overview : 'No description available',
+                                                type: 'movie',
+                                                country: item.original_language ? item.original_language.toUpperCase() : 'Unknown',
+                                                bingeScore: Math.floor(Math.random() * 20) + 75 // Random binge score between 75-95
+                                            }
+                                        });
+                                        usedIds.add(`movie-${item.id}`);
+                                        recentlyShownItems.push(`movie-${item.id}`);
+                                    }
+                                }
+                                moviesapiStatus.className = 'status-dot status-online';
+                                
+                                // Show load more button if there are more pages
+                                loadMoreBtn.style.display = 'block';
+                                
+                                showToast(`Found ${moviesData.results.length} movies`, 'success');
+                            } else {
+                                console.log('No results from TMDB API');
+                                moviesapiStatus.className = 'status-dot status-offline';
+                                loadMoreBtn.style.display = 'none';
+                            }
+                        } else {
+                            throw new Error('TMDB API error');
+                        }
+                    } catch (moviesError) {
+                        console.error('TMDB API error:', moviesError);
+                        moviesapiStatus.className = 'status-dot status-offline';
+                        loadMoreBtn.style.display = 'none';
+                        showToast('Movies API is temporarily unavailable', 'error');
+                    }
+                    
+                    // Store recently shown items in localStorage (keep only last 50)
+                    if (recentlyShownItems.length > 50) {
+                        recentlyShownItems = recentlyShownItems.slice(recentlyShownItems.length - 50);
+                    }
+                    localStorage.setItem('recentlyShownItems', JSON.stringify(recentlyShownItems));
                     
                     if (currentResults.length > 0) {
                         displayResults(currentResults);
-                    } else if (page === 1) {
+                    } else {
                         noResultsElement.style.display = 'block';
                         resultsTitle.textContent = 'No Results Found';
                         showToast('No results found for your search', 'error');
@@ -1594,17 +1474,6 @@
                 });
             }
             
-            // Update country button accessibility attributes
-            function updateCountryButtons() {
-                countryButtons.forEach(button => {
-                    if (button.dataset.country === activeCountry) {
-                        button.setAttribute('aria-pressed', 'true');
-                    } else {
-                        button.setAttribute('aria-pressed', 'false');
-                    }
-                });
-            }
-            
             // Event listeners
             searchBtn.addEventListener('click', () => {
                 const query = searchInput.value.trim().toLowerCase();
@@ -1645,29 +1514,6 @@
                 });
                 
                 // Add keyboard support for filter buttons
-                button.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        button.click();
-                        e.preventDefault();
-                    }
-                });
-            });
-            
-            // Add event listeners to country buttons
-            countryButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    countryButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    activeCountry = button.dataset.country;
-                    updateCountryButtons();
-                    
-                    if (currentResults.length > 0) {
-                        searchEntertainment(currentQuery);
-                        showToast(`Showing content from ${countryNames[activeCountry]}`, 'success');
-                    }
-                });
-                
-                // Add keyboard support for country buttons
                 button.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         button.click();
@@ -1723,7 +1569,6 @@
             
             // Update filter buttons accessibility on load
             updateFilterButtons();
-            updateCountryButtons();
             
             // Display saved items if any
             displaySavedItems();
