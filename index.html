@@ -1,48 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="script.js" defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PickMyBinge.com - Find Your Next Binge-Worthy Show or Movie | Streaming Recommendations</title>
-    <meta name="description" content="Struggling to decide what to watch? PickMyBinge helps you discover the best binge-worthy TV shows, movies, and streaming content. Get personalized recommendations based on your mood and preferences.">
-    <meta name="keywords" content="what to watch, binge-worthy shows, streaming recommendations, best TV shows, top movies, Netflix recommendations, Disney+ picks, Amazon Prime shows, Hulu series, what to binge">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="PickMyBinge.com">
-    <link rel="canonical" href="https://www.pickmybinge.com/">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.pickmybinge.com/">
-    <meta property="og:title" content="PickMyBinge.com - Find Your Next Binge-Worthy Show or Movie">
-    <meta property="og:description" content="Discover your next favorite binge-worthy TV show or movie. Personalized recommendations for Netflix, Hulu, Amazon Prime, Disney+ and more.">
-    <meta property="og:image" content="https://www.pickmybinge.com/images/og-image.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://www.pickmybinge.com/">
-    <meta property="twitter:title" content="PickMyBinge.com - Find Your Next Binge-Worthy Show or Movie">
-    <meta property="twitter:description" content="Discover your next favorite binge-worthy TV show or movie. Personalized recommendations for all streaming platforms.">
-    <meta property="twitter:image" content="https://www.pickmybinge.com/images/twitter-image.jpg">
-    
-    <!-- JSON-LD structured data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "PickMyBinge",
-      "url": "https://www.pickmybinge.com/",
-      "description": "Tool to help users find TV shows and movies to watch based on their preferences",
-      "applicationCategory": "EntertainmentApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
-    
+    <title>PickMyBinge.com - Find Your Next Binge-Worthy Show or Movie</title>
+    <meta name="description" content="Struggling to decide what to watch? PickMyBinge helps you discover the best binge-worthy TV shows, movies, and streaming content.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -898,6 +860,7 @@
         
         .advanced-filters.visible {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
         
         .filter-group {
@@ -1039,12 +1002,8 @@
             
             <div class="api-status">
                 <div class="status-item">
-                    <span class="status-dot status-loading" id="tvmaze-status"></span>
-                    <span>TVmaze API</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-dot status-loading" id="moviesapi-status"></span>
-                    <span>Movies API</span>
+                    <span class="status-dot status-loading" id="tmdb-status"></span>
+                    <span>TMDB API</span>
                 </div>
             </div>
         </header>
@@ -1272,8 +1231,7 @@
             const instructions = document.getElementById('instructions');
             const noResultsElement = document.getElementById('no-results');
             const filterButtons = document.querySelectorAll('.filter-btn');
-            const tvmazeStatus = document.getElementById('tvmaze-status');
-            const moviesapiStatus = document.getElementById('moviesapi-status');
+            const tmdbStatus = document.getElementById('tmdb-status');
             const bubbles = document.querySelectorAll('.bubble');
             const toast = document.getElementById('toast');
             const autocomplete = document.getElementById('autocomplete');
@@ -1289,20 +1247,20 @@
             const streamingFilter = document.getElementById('streaming-filter');
             
             // API URLs
-            const TVMAZE_API_URL = 'https://api.tvmaze.com/';
             const TMDB_API_URL = 'https://api.themoviedb.org/3';
             const TMDB_API_KEY = '15d2ea6d0dc1d476efbca3eba2b9bbfb';
+            const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
             
             const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/300x450/2D3047/8B8BA0?text=No+Image';
             
             // Genre mappings for API calls
             const genreMappings = {
-                'popular': {tvmaze: '', tmdb: ''},
-                'comedy': {tvmaze: 'comedy', tmdb: '35'},
-                'action': {tvmaze: 'action', tmdb: '28'},
-                'drama': {tvmaze: 'drama', tmdb: '18'},
-                'sci-fi': {tvmaze: 'science-fiction', tmdb: '878'},
-                'thriller': {tvmaze: 'thriller', tmdb: '53'}
+                'popular': {movie: '', tv: ''},
+                'comedy': {movie: '35', tv: '35'},
+                'action': {movie: '28', tv: '10759'},
+                'drama': {movie: '18', tv: '18'},
+                'sci-fi': {movie: '878', tv: '10765'},
+                'thriller': {movie: '53', tv: '80'}
             };
             
             // Streaming service mappings
@@ -1344,7 +1302,6 @@
             let savedItems = JSON.parse(localStorage.getItem('savedBingeItems')) || [];
             let currentPage = 1;
             let currentQuery = '';
-            let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
             let recentlyShownItems = JSON.parse(localStorage.getItem('recentlyShownItems')) || [];
             
             // Show toast notification
@@ -1444,7 +1401,7 @@
                 });
             }
             
-            // Function to search APIs
+            // Function to search TMDB API
             async function searchEntertainment(query, page = 1) {
                 loadingElement.style.display = 'block';
                 errorElement.style.display = 'none';
@@ -1479,85 +1436,18 @@
                     // Get genre mapping
                     const genre = genreMappings[query] || {};
                     
-                    // Search TVmaze API for TV shows
+                    // Search TMDB API for both movies and TV shows
                     try {
-                        tvmazeStatus.className = 'status-dot status-loading';
-                        let tvmazeUrl = `${TVMAZE_API_URL}shows`;
-                        const params = [];
+                        tmdbStatus.className = 'status-dot status-loading';
                         
-                        if (genre.tvmaze) {
-                            params.push(`genres=${genre.tvmaze}`);
-                        }
-                        
-                        if (params.length > 0) {
-                            tvmazeUrl += `?${params.join('&')}`;
-                        }
-                        
-                        const tvmazeResponse = await fetch(tvmazeUrl);
-                        if (tvmazeResponse.ok) {
-                            const tvmazeData = await tvmazeResponse.json();
-                            
-                            // Process TVmaze results
-                            if (tvmazeData && tvmazeData.length > 0) {
-                                // Get random shows, filtering out recently shown ones
-                                const availableShows = tvmazeData.filter(show => 
-                                    !recentlyShownItems.includes(`tv-${show.id}`)
-                                );
-                                
-                                // If we don't have enough shows, reset the recently shown list
-                                if (availableShows.length < 6) {
-                                    recentlyShownItems = recentlyShownItems.filter(id => !id.startsWith('tv-'));
-                                    showToast('Resetting TV show history to show more variety', 'success');
-                                }
-                                
-                                const randomShows = getRandomItems(availableShows.length > 0 ? availableShows : tvmazeData, 6);
-                                
-                                for (const show of randomShows) {
-                                    if (!usedIds.has(`tv-${show.id}`)) {
-                                        currentResults.push({
-                                            type: 'tvmaze',
-                                            data: {
-                                                id: `tv-${show.id}`,
-                                                title: show.name,
-                                                year: show.premiered ? new Date(show.premiered).getFullYear() : 'N/A',
-                                                endYear: show.ended ? new Date(show.ended).getFullYear() : null,
-                                                poster: show.image ? show.image.medium : PLACEHOLDER_IMAGE,
-                                                rating: show.rating ? show.rating.average : 'N/A',
-                                                plot: show.summary ? show.summary.replace(/<[^>]*>/g, '') : 'No description available',
-                                                type: 'tv',
-                                                country: show.network ? show.network.country.code : 'Unknown',
-                                                bingeScore: Math.floor(Math.random() * 20) + 75 // Random binge score between 75-95
-                                            }
-                                        });
-                                        usedIds.add(`tv-${show.id}`);
-                                        recentlyShownItems.push(`tv-${show.id}`);
-                                    }
-                                }
-                                tvmazeStatus.className = 'status-dot status-online';
-                                showToast(`Found ${randomShows.length} TV shows`, 'success');
-                            } else {
-                                console.log('No results from TVmaze');
-                                tvmazeStatus.className = 'status-dot status-offline';
-                            }
+                        // Search for movies
+                        let moviesUrl = '';
+                        if (genre.movie) {
+                            moviesUrl = `${TMDB_API_URL}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=${genre.movie}`;
+                        } else if (query === 'popular') {
+                            moviesUrl = `${TMDB_API_URL}/movie/popular?api_key=${TMDB_API_KEY}`;
                         } else {
-                            throw new Error('TVmaze API error');
-                        }
-                    } catch (tvmazeError) {
-                        console.error('TVmaze API error:', tvmazeError);
-                        tvmazeStatus.className = 'status-dot status-offline';
-                        showToast('TVmaze API is temporarily unavailable', 'error');
-                    }
-                    
-                    // Search for movies using TMDB API - get completely random movies
-                    try {
-                        moviesapiStatus.className = 'status-dot status-loading';
-                        
-                        // Get a random page to ensure variety
-                        const randomPage = Math.floor(Math.random() * 100) + 1;
-                        let moviesUrl = `${TMDB_API_URL}/discover/movie?api_key=${TMDB_API_KEY}&page=${randomPage}`;
-                        
-                        if (genre.tmdb) {
-                            moviesUrl += `&with_genres=${genre.tmdb}`;
+                            moviesUrl = `${TMDB_API_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${query}`;
                         }
                         
                         // Apply advanced filters if set
@@ -1581,6 +1471,10 @@
                         // Sort by popularity to get a mix of ratings
                         moviesUrl += '&sort_by=popularity.desc';
                         
+                        // Get a random page to ensure variety
+                        const randomPage = Math.floor(Math.random() * 5) + 1;
+                        moviesUrl += `&page=${randomPage}`;
+                        
                         const moviesResponse = await fetch(moviesUrl);
                         if (moviesResponse.ok) {
                             const moviesData = await moviesResponse.json();
@@ -1595,7 +1489,6 @@
                                 // If we don't have enough movies, reset the recently shown list
                                 if (availableMovies.length < 6) {
                                     recentlyShownItems = recentlyShownItems.filter(id => !id.startsWith('movie-'));
-                                    showToast('Resetting movie history to show more variety', 'success');
                                 }
                                 
                                 const moviesToShow = availableMovies.length > 0 ? availableMovies : moviesData.results;
@@ -1609,12 +1502,12 @@
                                         }
                                         
                                         currentResults.push({
-                                            type: 'tmdb',
+                                            type: 'movie',
                                             data: {
                                                 id: `movie-${item.id}`,
                                                 title: item.title,
                                                 year: item.release_date ? new Date(item.release_date).getFullYear() : 'N/A',
-                                                poster: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : PLACEHOLDER_IMAGE,
+                                                poster: item.poster_path ? `${TMDB_IMAGE_BASE}${item.poster_path}` : PLACEHOLDER_IMAGE,
                                                 rating: item.vote_average ? item.vote_average : 'N/A',
                                                 plot: item.overview ? item.overview : 'No description available',
                                                 type: 'movie',
@@ -1627,25 +1520,108 @@
                                         recentlyShownItems.push(`movie-${item.id}`);
                                     }
                                 }
-                                moviesapiStatus.className = 'status-dot status-online';
-                                
-                                // Show load more button if there are more pages
-                                loadMoreBtn.style.display = 'block';
-                                
-                                showToast(`Found ${moviesData.results.length} movies`, 'success');
                             } else {
-                                console.log('No results from TMDB API');
-                                moviesapiStatus.className = 'status-dot status-offline';
-                                loadMoreBtn.style.display = 'none';
+                                console.log('No movie results from TMDB API');
                             }
                         } else {
                             throw new Error('TMDB API error');
                         }
-                    } catch (moviesError) {
-                        console.error('TMDB API error:', moviesError);
-                        moviesapiStatus.className = 'status-dot status-offline';
+                        
+                        // Search for TV shows
+                        let tvUrl = '';
+                        if (genre.tv) {
+                            tvUrl = `${TMDB_API_URL}/discover/tv?api_key=${TMDB_API_KEY}&with_genres=${genre.tv}`;
+                        } else if (query === 'popular') {
+                            tvUrl = `${TMDB_API_URL}/tv/popular?api_key=${TMDB_API_KEY}`;
+                        } else {
+                            tvUrl = `${TMDB_API_URL}/search/tv?api_key=${TMDB_API_KEY}&query=${query}`;
+                        }
+                        
+                        // Apply advanced filters if set
+                        if (yearValue) {
+                            if (yearValue.includes('-')) {
+                                const [start, end] = yearValue.split('-');
+                                tvUrl += `&first_air_date.gte=${start}-01-01&first_air_date.lte=${end}-12-31`;
+                            } else if (yearValue === 'before-1990') {
+                                tvUrl += '&first_air_date.lte=1989-12-31';
+                            } else {
+                                tvUrl += `&first_air_date_year=${yearValue}`;
+                            }
+                        }
+                        
+                        if (ratingValue > 0) {
+                            tvUrl += `&vote_average.gte=${ratingValue}`;
+                        }
+                        
+                        // Sort by popularity to get a mix of ratings
+                        tvUrl += '&sort_by=popularity.desc';
+                        
+                        // Get a random page to ensure variety
+                        tvUrl += `&page=${randomPage}`;
+                        
+                        const tvResponse = await fetch(tvUrl);
+                        if (tvResponse.ok) {
+                            const tvData = await tvResponse.json();
+                            
+                            // Process TV results
+                            if (tvData && tvData.results && tvData.results.length > 0) {
+                                // Filter out recently shown TV shows
+                                const availableTvShows = tvData.results.filter(tv => 
+                                    !recentlyShownItems.includes(`tv-${tv.id}`)
+                                );
+                                
+                                // If we don't have enough TV shows, reset the recently shown list
+                                if (availableTvShows.length < 6) {
+                                    recentlyShownItems = recentlyShownItems.filter(id => !id.startsWith('tv-'));
+                                }
+                                
+                                const tvToShow = availableTvShows.length > 0 ? availableTvShows : tvData.results;
+                                
+                                for (const item of getRandomItems(tvToShow, 6)) {
+                                    if (!usedIds.has(`tv-${item.id}`)) {
+                                        // Add streaming service badge if filter is set
+                                        let streamingBadge = '';
+                                        if (streamingFilter.value) {
+                                            streamingBadge = `<span class="streaming-badge ${streamingFilter.value}">${streamingServices[streamingFilter.value]}</span>`;
+                                        }
+                                        
+                                        currentResults.push({
+                                            type: 'tv',
+                                            data: {
+                                                id: `tv-${item.id}`,
+                                                title: item.name,
+                                                year: item.first_air_date ? new Date(item.first_air_date).getFullYear() : 'N/A',
+                                                poster: item.poster_path ? `${TMDB_IMAGE_BASE}${item.poster_path}` : PLACEHOLDER_IMAGE,
+                                                rating: item.vote_average ? item.vote_average : 'N/A',
+                                                plot: item.overview ? item.overview : 'No description available',
+                                                type: 'tv',
+                                                country: item.original_language ? item.original_language.toUpperCase() : 'Unknown',
+                                                bingeScore: Math.floor(Math.random() * 20) + 75, // Random binge score between 75-95
+                                                streaming: streamingBadge
+                                            }
+                                        });
+                                        usedIds.add(`tv-${item.id}`);
+                                        recentlyShownItems.push(`tv-${item.id}`);
+                                    }
+                                }
+                            } else {
+                                console.log('No TV results from TMDB API');
+                            }
+                        } else {
+                            throw new Error('TMDB API error');
+                        }
+                        
+                        tmdbStatus.className = 'status-dot status-online';
+                        
+                        // Show load more button if there are more pages
+                        loadMoreBtn.style.display = 'block';
+                        
+                        showToast(`Found ${currentResults.length} items`, 'success');
+                    } catch (tmdbError) {
+                        console.error('TMDB API error:', tmdbError);
+                        tmdbStatus.className = 'status-dot status-offline';
                         loadMoreBtn.style.display = 'none';
-                        showToast('Movies API is temporarily unavailable', 'error');
+                        showToast('TMDB API is temporarily unavailable', 'error');
                     }
                     
                     // Store recently shown items in localStorage (keep only last 50)
@@ -1677,7 +1653,7 @@
             // Helper function to get random items from array
             function getRandomItems(array, count) {
                 const shuffled = [...array].sort(() => 0.5 - Math.random());
-                return shuffled.slice(0, count);
+                return shuffled.slice(0, Math.min(count, shuffled.length));
             }
             
             // Function to display results
@@ -1710,7 +1686,7 @@
                     
                     const data = item.data;
                     const title = data.title || 'Unknown Title';
-                    const year = data.endYear ? `${data.year}-${data.endYear}` : data.year;
+                    const year = data.year || 'N/A';
                     const image = data.poster || PLACEHOLDER_IMAGE;
                     const plot = data.plot || 'No description available';
                     const rating = data.rating !== 'N/A' ? data.rating : 'N/A';
@@ -1820,7 +1796,7 @@
                     card.setAttribute('role', 'listitem');
                     
                     const title = item.title || 'Unknown Title';
-                    const year = item.endYear ? `${item.year}-${item.endYear}` : item.year;
+                    const year = item.year || 'N/A';
                     const image = item.poster || PLACEHOLDER_IMAGE;
                     const plot = item.plot || 'No description available';
                     const rating = item.rating !== 'N/A' ? item.rating : 'N/A';
@@ -1988,8 +1964,7 @@
             }
             
             // Initialize API status
-            tvmazeStatus.className = 'status-dot status-loading';
-            moviesapiStatus.className = 'status-dot status-loading';
+            tmdbStatus.className = 'status-dot status-loading';
             
             // Pre-load popular content on first load
             searchEntertainment('popular');
