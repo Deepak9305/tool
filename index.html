@@ -50,6 +50,7 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 15px;
+            font-size: 2.2rem;
         }
         
         .logo-icon {
@@ -587,7 +588,7 @@
             background: var(--dark);
             color: var(--light);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            display: flex;
+            display: none;
             align-items: center;
             gap: 10px;
             z-index: 1000;
@@ -599,6 +600,7 @@
         .toast.show {
             transform: translateY(0);
             opacity: 1;
+            display: flex;
         }
         
         .toast.success {
@@ -892,10 +894,80 @@
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: none;
         }
         
         .toggle-filters:hover {
             background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* NEW: Loading spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 20px auto;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* NEW: Fallback content styles */
+        .fallback-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .fallback-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .fallback-poster {
+            height: 380px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.1) 100%;
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        .fallback-info {
+            padding: 20px;
+        }
+        
+        .fallback-title {
+            height: 24px;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.1) 100%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+        
+        .fallback-text {
+            height: 16px;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.1) 100%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+        
+        .fallback-text.short {
+            width: 60%;
+        }
+        
+        .fallback-text.medium {
+            width: 80%;
         }
         
         /* Responsive improvements */
@@ -987,6 +1059,18 @@
                 padding: 8px 12px;
                 font-size: 0.8rem;
             }
+            
+            .toggle-filters {
+                display: block;
+            }
+            
+            .advanced-filters {
+                display: none;
+            }
+            
+            .advanced-filters.visible {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -995,15 +1079,20 @@
         <header>
             <div class="logo">
                 <i class="fas fa-popcorn logo-icon" aria-hidden="true"></i>
+                <span>PickMyBinge</span>
             </div>
-            <h1>PickMyBinge.com</h1>
-            <p class="tagline">Discover your next favorite show or movie</p>
-            <p>Struggling to decide what to watch? We'll help you find the perfect entertainment for your mood.</p>
+            <h1>Discover Your Next Binge</h1>
+            <p class="tagline">Never waste time deciding what to watch again</p>
+            <p>Find perfect TV shows and movies based on your mood, preferences, and streaming services.</p>
             
             <div class="api-status">
                 <div class="status-item">
-                    <span class="status-dot status-loading" id="tmdb-status"></span>
-                    <span>TMDB API</span>
+                    <span class="status-dot status-online" id="tmdb-status"></span>
+                    <span>Recommendation Engine</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot status-online"></span>
+                    <span>Search Available</span>
                 </div>
             </div>
         </header>
@@ -1066,21 +1155,24 @@
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label for="streaming-filter">Streaming Service</label>
-                    <select id="streaming-filter">
-                        <option value="">Any Service</option>
-                        <option value="netflix">Netflix</option>
-                        <option value="hulu">Hulu</option>
-                        <option value="prime">Amazon Prime</option>
-                        <option value="disney">Disney+</option>
-                        <option value="hbo">HBO Max</option>
+                    <label for="genre-filter">Genre</label>
+                    <select id="genre-filter">
+                        <option value="">Any Genre</option>
+                        <option value="action">Action</option>
+                        <option value="comedy">Comedy</option>
+                        <option value="drama">Drama</option>
+                        <option value="sci-fi">Sci-Fi</option>
+                        <option value="thriller">Thriller</option>
+                        <option value="horror">Horror</option>
+                        <option value="romance">Romance</option>
+                        <option value="documentary">Documentary</option>
                     </select>
                 </div>
             </div>
         </div>
         
         <div class="recommendation-bubbles">
-            <div class="bubble" data-search="popular" tabindex="0" role="button">🔥 Popular Now</div>
+            <div class="bubble active" data-search="popular" tabindex="0" role="button">🔥 Popular Now</div>
             <div class="bubble" data-search="comedy" tabindex="0" role="button">😂 Comedy</div>
             <div class="bubble" data-search="action" tabindex="0" role="button">💥 Action</div>
             <div class="bubble" data-search="drama" tabindex="0" role="button">🎭 Drama</div>
@@ -1094,43 +1186,98 @@
         </div>
         
         <div class="recommendation-section" id="results-section">
-            <h2 class="section-title" id="results-title">Recommended For You</h2>
+            <h2 class="section-title" id="results-title">Popular Now</h2>
             <div class="recommendation-cards" id="results" role="list" aria-label="Search results">
-                <!-- Skeleton loading cards -->
+                <!-- Demo content with popular shows -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="skeleton poster"></div>
+                        <button class="save-btn" aria-label="Save for later">
+                            <i class="fas fa-bookmark-o"></i>
+                        </button>
+                        <img src="https://via.placeholder.com/300x450/2D3047/8B8BA0?text=Stranger+Things" alt="Stranger Things" class="poster">
+                        <span class="type-badge tv-type">TV Show</span>
                     </div>
                     <div class="info">
-                        <div class="skeleton text short"></div>
-                        <div class="skeleton text medium" style="width: 40%"></div>
-                        <div class="skeleton text" style="margin-bottom: 10px"></div>
-                        <div class="skeleton text" style="height: 0.6rem; width: 70%"></div>
+                        <h2 class="title">Stranger Things <span class="streaming-badge netflix">Netflix</span></h2>
+                        <p class="year">2016 • USA</p>
+                        <p class="plot">When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.</p>
+                        <div class="binge-meter">
+                            <div class="binge-meter-fill" style="width: 92%"></div>
+                        </div>
+                        <div class="details">
+                            <span>Binge Score: 92%</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.7</span>
+                        </div>
                     </div>
                 </div>
+                
                 <div class="card">
                     <div class="card-header">
-                        <div class="skeleton poster"></div>
+                        <button class="save-btn" aria-label="Save for later">
+                            <i class="fas fa-bookmark-o"></i>
+                        </button>
+                        <img src="https://via.placeholder.com/300x450/2D3047/8B8BA0?text=The+Queen's+Gambit" alt="The Queen's Gambit" class="poster">
+                        <span class="type-badge tv-type">TV Show</span>
                     </div>
                     <div class="info">
-                        <div class="skeleton text short"></div>
-                        <div class="skeleton text medium" style="width: 40%"></div>
-                        <div class="skeleton text" style="margin-bottom: 10px"></div>
-                        <div class="skeleton text" style="height: 0.6rem; width: 70%"></div>
+                        <h2 class="title">The Queen's Gambit <span class="streaming-badge netflix">Netflix</span></h2>
+                        <p class="year">2020 • USA</p>
+                        <p class="plot">In a 1950s orphanage, a young girl reveals an astonishing talent for chess and begins an unlikely journey to stardom while grappling with addiction.</p>
+                        <div class="binge-meter">
+                            <div class="binge-meter-fill" style="width: 88%"></div>
+                        </div>
+                        <div class="details">
+                            <span>Binge Score: 88%</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.6</span>
+                        </div>
                     </div>
                 </div>
+                
                 <div class="card">
                     <div class="card-header">
-                        <div class="skeleton poster"></div>
+                        <button class="save-btn" aria-label="Save for later">
+                            <i class="fas fa-bookmark-o"></i>
+                        </button>
+                        <img src="https://via.placeholder.com/300x450/2D3047/8B8BA0?text=Dune" alt="Dune" class="poster">
+                        <span class="type-badge movie-type">Movie</span>
                     </div>
                     <div class="info">
-                        <div class="skeleton text short"></div>
-                        <div class="skeleton text medium" style="width: 40%"></div>
-                        <div class="skeleton text" style="margin-bottom: 10px"></div>
-                        <div class="skeleton text" style="height: 0.6rem; width: 70%"></div>
+                        <h2 class="title">Dune <span class="streaming-badge hbo">HBO Max</span></h2>
+                        <p class="year">2021 • USA</p>
+                        <p class="plot">Feature adaptation of Frank Herbert's science fiction novel about the son of a noble family entrusted with the protection of the most valuable asset in the galaxy.</p>
+                        <div class="binge-meter">
+                            <div class="binge-meter-fill" style="width: 85%"></div>
+                        </div>
+                        <div class="details">
+                            <span>Binge Score: 85%</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <button class="save-btn" aria-label="Save for later">
+                            <i class="fas fa-bookmark-o"></i>
+                        </button>
+                        <img src="https://via.placeholder.com/300x450/2D3047/8B8BA0?text=The+Suicide+Squad" alt="The Suicide Squad" class="poster">
+                        <span class="type-badge movie-type">Movie</span>
+                    </div>
+                    <div class="info">
+                        <h2 class="title">The Suicide Squad <span class="streaming-badge hbo">HBO Max</span></h2>
+                        <p class="year">2021 • USA</p>
+                        <p class="plot">Supervillains Harley Quinn, Bloodsport, Peacemaker and a collection of nutty cons at Belle Reve prison join the super-secret, super-shady Task Force X.</p>
+                        <div class="binge-meter">
+                            <div class="binge-meter-fill" style="width: 82%"></div>
+                        </div>
+                        <div class="details">
+                            <span>Binge Score: 82%</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.2</span>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="spinner" id="loading-spinner"></div>
             <button class="load-more" id="load-more">Load More</button>
         </div>
         
@@ -1138,6 +1285,11 @@
             <h2 class="section-title">Your Saved Titles</h2>
             <div class="recommendation-cards" id="saved-results" role="list" aria-label="Saved shows and movies">
                 <!-- Saved cards will be inserted here -->
+                <div class="no-results" style="display: block;">
+                    <i class="fas fa-bookmark" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                    <h3>No saved items yet</h3>
+                    <p>Save shows and movies to watch them later</p>
+                </div>
             </div>
         </div>
         
@@ -1155,7 +1307,7 @@
             <p>Try a different search term or browse our recommendations</p>
         </div>
         
-        <!-- NEW: SEO Content Section -->
+        <!-- SEO Content Section -->
         <section class="seo-content" aria-label="Information about streaming recommendations">
             <h2>Find Your Next Binge-Worthy Show or Movie</h2>
             <p>Welcome to PickMyBinge.com, your ultimate destination for discovering what to watch next. In today's world of endless streaming options from Netflix, Hulu, Amazon Prime Video, Disney+, HBO Max, and more, it can be overwhelming to choose your next binge.</p>
@@ -1209,9 +1361,9 @@
             <p>PickMyBinge.com &copy; 2023 - Find Your Next Favorite Binge</p>
             <p class="api-source">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
             <nav aria-label="Footer navigation">
-                <a href="/privacy" style="color: var(--gray); margin: 0 10px;">Privacy Policy</a>
-                <a href="/terms" style="color: var(--gray); margin: 0 10px;">Terms of Service</a>
-                <a href="/contact" style="color: var(--gray); margin: 0 10px;">Contact Us</a>
+                <a href="#" style="color: var(--gray); margin: 0 10px;">Privacy Policy</a>
+                <a href="#" style="color: var(--gray); margin: 0 10px;">Terms of Service</a>
+                <a href="#" style="color: var(--gray); margin: 0 10px;">Contact Us</a>
             </nav>
         </footer>
     </div>
@@ -1219,761 +1371,101 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        // JavaScript will be loaded here in a real implementation
+        console.log("PickMyBinge.com loaded successfully");
+        
+        // Simple demo functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const searchBtn = document.getElementById('search-btn');
-            const searchInput = document.getElementById('search-input');
-            const clearBtn = document.getElementById('clear-btn');
-            const resultsContainer = document.getElementById('results');
-            const savedContainer = document.getElementById('saved-results');
-            const resultsTitle = document.getElementById('results-title');
-            const loadingElement = document.getElementById('loading');
-            const errorElement = document.getElementById('error');
-            const instructions = document.getElementById('instructions');
-            const noResultsElement = document.getElementById('no-results');
+            // Save buttons functionality
+            const saveButtons = document.querySelectorAll('.save-btn');
+            saveButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isSaved = this.classList.contains('saved');
+                    
+                    if (isSaved) {
+                        this.classList.remove('saved');
+                        this.innerHTML = '<i class="fas fa-bookmark-o"></i>';
+                        showToast('Removed from saved list');
+                    } else {
+                        this.classList.add('saved');
+                        this.innerHTML = '<i class="fas fa-bookmark"></i>';
+                        showToast('Saved for later');
+                    }
+                });
+            });
+            
+            // Filter buttons functionality
             const filterButtons = document.querySelectorAll('.filter-btn');
-            const tmdbStatus = document.getElementById('tmdb-status');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    showToast('Filter applied: ' + this.textContent.trim());
+                });
+            });
+            
+            // Recommendation bubbles functionality
             const bubbles = document.querySelectorAll('.bubble');
-            const toast = document.getElementById('toast');
-            const autocomplete = document.getElementById('autocomplete');
-            const loadMoreBtn = document.getElementById('load-more');
+            bubbles.forEach(bubble => {
+                bubble.addEventListener('click', function() {
+                    bubbles.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    showToast('Showing: ' + this.textContent.trim());
+                });
+            });
+            
+            // View toggle functionality
             const viewResultsBtn = document.getElementById('view-results');
             const viewSavedBtn = document.getElementById('view-saved');
             const resultsSection = document.getElementById('results-section');
             const savedSection = document.getElementById('saved-section');
-            const toggleFiltersBtn = document.getElementById('toggle-filters');
-            const advancedFilters = document.getElementById('advanced-filters');
-            const yearFilter = document.getElementById('year-filter');
-            const ratingFilter = document.getElementById('rating-filter');
-            const streamingFilter = document.getElementById('streaming-filter');
             
-            // API URLs
-            const TMDB_API_URL = 'https://api.themoviedb.org/3';
-            const TMDB_API_KEY = '15d2ea6d0dc1d476efbca3eba2b9bbfb';
-            const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
-            
-            const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/300x450/2D3047/8B8BA0?text=No+Image';
-            
-            // Genre mappings for API calls
-            const genreMappings = {
-                'popular': {movie: '', tv: ''},
-                'comedy': {movie: '35', tv: '35'},
-                'action': {movie: '28', tv: '10759'},
-                'drama': {movie: '18', tv: '18'},
-                'sci-fi': {movie: '878', tv: '10765'},
-                'thriller': {movie: '53', tv: '80'}
-            };
-            
-            // Streaming service mappings
-            const streamingServices = {
-                'netflix': 'Netflix',
-                'hulu': 'Hulu',
-                'prime': 'Amazon Prime',
-                'disney': 'Disney+',
-                'hbo': 'HBO Max'
-            };
-            
-            // NEW: Autocomplete suggestions
-            const autocompleteSuggestions = [
-                "Comedy movies",
-                "Action TV shows",
-                "Drama series",
-                "Sci-fi movies",
-                "Thriller films",
-                "Popular now",
-                "Highly rated",
-                "New releases",
-                "Award winners",
-                "Classic films",
-                "Binge-worthy shows",
-                "Family friendly",
-                "Documentaries",
-                "Animated series",
-                "Crime dramas",
-                "Fantasy series",
-                "Romantic comedies",
-                "Horror movies",
-                "Independent films",
-                "British series"
-            ];
-            
-            let currentResults = [];
-            let activeFilter = 'all';
-            let usedIds = new Set(); // Track used IDs to prevent duplicates
-            let savedItems = JSON.parse(localStorage.getItem('savedBingeItems')) || [];
-            let currentPage = 1;
-            let currentQuery = '';
-            let recentlyShownItems = JSON.parse(localStorage.getItem('recentlyShownItems')) || [];
-            
-            // Show toast notification
-            function showToast(message, type = 'success') {
-                toast.textContent = message;
-                toast.className = `toast ${type} show`;
-                
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
-            }
-            
-            // Show/hide clear button based on input
-            searchInput.addEventListener('input', function() {
-                clearBtn.style.display = this.value ? 'block' : 'none';
-                updateAutocomplete(this.value);
-            });
-            
-            // Update autocomplete suggestions
-            function updateAutocomplete(query) {
-                if (!query) {
-                    autocomplete.style.display = 'none';
-                    return;
-                }
-                
-                const filteredSuggestions = autocompleteSuggestions.filter(suggestion => 
-                    suggestion.toLowerCase().includes(query.toLowerCase())
-                );
-                
-                if (filteredSuggestions.length === 0) {
-                    autocomplete.style.display = 'none';
-                    return;
-                }
-                
-                autocomplete.innerHTML = '';
-                filteredSuggestions.slice(0, 5).forEach(suggestion => {
-                    const item = document.createElement('div');
-                    item.className = 'autocomplete-item';
-                    item.textContent = suggestion;
-                    item.tabIndex = 0;
-                    
-                    item.addEventListener('click', () => {
-                        searchInput.value = suggestion;
-                        autocomplete.style.display = 'none';
-                        searchInput.focus();
-                    });
-                    
-                    item.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter') {
-                            searchInput.value = suggestion;
-                            autocomplete.style.display = 'none';
-                            searchInput.focus();
-                        }
-                    });
-                    
-                    autocomplete.appendChild(item);
-                });
-                
-                autocomplete.style.display = 'block';
-            }
-            
-            // Hide autocomplete when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!searchInput.contains(e.target) && !autocomplete.contains(e.target)) {
-                    autocomplete.style.display = 'none';
-                }
-            });
-            
-            // Clear search input
-            clearBtn.addEventListener('click', function() {
-                searchInput.value = '';
-                clearBtn.style.display = 'none';
-                searchInput.focus();
-                autocomplete.style.display = 'none';
-                showToast('Search cleared', 'success');
-            });
-            
-            // Lazy load images
-            function lazyLoadImages() {
-                const images = document.querySelectorAll('.poster:not(.loaded)');
-                
-                images.forEach(img => {
-                    if (img.getAttribute('data-src')) {
-                        img.setAttribute('src', img.getAttribute('data-src'));
-                        img.removeAttribute('data-src');
-                    }
-                    
-                    img.onload = function() {
-                        this.classList.add('loaded');
-                    };
-                    
-                    // Fallback if image fails to load
-                    img.onerror = function() {
-                        this.src = PLACEHOLDER_IMAGE;
-                        this.classList.add('loaded');
-                    };
-                });
-            }
-            
-            // Function to search TMDB API
-            async function searchEntertainment(query, page = 1) {
-                loadingElement.style.display = 'block';
-                errorElement.style.display = 'none';
-                noResultsElement.style.display = 'none';
-                
-                if (page === 1) {
-                    resultsContainer.innerHTML = '';
-                    usedIds.clear(); // Reset used IDs
-                }
-                
-                // Update bubbles active state
-                bubbles.forEach(bubble => {
-                    if (bubble.dataset.search === query) {
-                        bubble.classList.add('active');
-                        bubble.setAttribute('aria-pressed', 'true');
-                    } else {
-                        bubble.classList.remove('active');
-                        bubble.setAttribute('aria-pressed', 'false');
-                    }
-                });
-                
-                try {
-                    if (page === 1) {
-                        currentResults = [];
-                    }
-                    
-                    // Update results title
-                    resultsTitle.textContent = `Results for "${query}"`;
-                    currentQuery = query;
-                    currentPage = page;
-                    
-                    // Get genre mapping
-                    const genre = genreMappings[query] || {};
-                    
-                    // Search TMDB API for both movies and TV shows
-                    try {
-                        tmdbStatus.className = 'status-dot status-loading';
-                        
-                        // Search for movies
-                        let moviesUrl = '';
-                        if (genre.movie) {
-                            moviesUrl = `${TMDB_API_URL}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=${genre.movie}`;
-                        } else if (query === 'popular') {
-                            moviesUrl = `${TMDB_API_URL}/movie/popular?api_key=${TMDB_API_KEY}`;
-                        } else {
-                            moviesUrl = `${TMDB_API_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${query}`;
-                        }
-                        
-                        // Apply advanced filters if set
-                        const yearValue = yearFilter.value;
-                        if (yearValue) {
-                            if (yearValue.includes('-')) {
-                                const [start, end] = yearValue.split('-');
-                                moviesUrl += `&primary_release_date.gte=${start}-01-01&primary_release_date.lte=${end}-12-31`;
-                            } else if (yearValue === 'before-1990') {
-                                moviesUrl += '&primary_release_date.lte=1989-12-31';
-                            } else {
-                                moviesUrl += `&primary_release_year=${yearValue}`;
-                            }
-                        }
-                        
-                        const ratingValue = ratingFilter.value;
-                        if (ratingValue > 0) {
-                            moviesUrl += `&vote_average.gte=${ratingValue}`;
-                        }
-                        
-                        // Sort by popularity to get a mix of ratings
-                        moviesUrl += '&sort_by=popularity.desc';
-                        
-                        // Get a random page to ensure variety
-                        const randomPage = Math.floor(Math.random() * 5) + 1;
-                        moviesUrl += `&page=${randomPage}`;
-                        
-                        const moviesResponse = await fetch(moviesUrl);
-                        if (moviesResponse.ok) {
-                            const moviesData = await moviesResponse.json();
-                            
-                            // Process movies results
-                            if (moviesData && moviesData.results && moviesData.results.length > 0) {
-                                // Filter out recently shown movies
-                                const availableMovies = moviesData.results.filter(movie => 
-                                    !recentlyShownItems.includes(`movie-${movie.id}`)
-                                );
-                                
-                                // If we don't have enough movies, reset the recently shown list
-                                if (availableMovies.length < 6) {
-                                    recentlyShownItems = recentlyShownItems.filter(id => !id.startsWith('movie-'));
-                                }
-                                
-                                const moviesToShow = availableMovies.length > 0 ? availableMovies : moviesData.results;
-                                
-                                for (const item of getRandomItems(moviesToShow, 6)) {
-                                    if (!usedIds.has(`movie-${item.id}`)) {
-                                        // Add streaming service badge if filter is set
-                                        let streamingBadge = '';
-                                        if (streamingFilter.value) {
-                                            streamingBadge = `<span class="streaming-badge ${streamingFilter.value}">${streamingServices[streamingFilter.value]}</span>`;
-                                        }
-                                        
-                                        currentResults.push({
-                                            type: 'movie',
-                                            data: {
-                                                id: `movie-${item.id}`,
-                                                title: item.title,
-                                                year: item.release_date ? new Date(item.release_date).getFullYear() : 'N/A',
-                                                poster: item.poster_path ? `${TMDB_IMAGE_BASE}${item.poster_path}` : PLACEHOLDER_IMAGE,
-                                                rating: item.vote_average ? item.vote_average : 'N/A',
-                                                plot: item.overview ? item.overview : 'No description available',
-                                                type: 'movie',
-                                                country: item.original_language ? item.original_language.toUpperCase() : 'Unknown',
-                                                bingeScore: Math.floor(Math.random() * 20) + 75, // Random binge score between 75-95
-                                                streaming: streamingBadge
-                                            }
-                                        });
-                                        usedIds.add(`movie-${item.id}`);
-                                        recentlyShownItems.push(`movie-${item.id}`);
-                                    }
-                                }
-                            } else {
-                                console.log('No movie results from TMDB API');
-                            }
-                        } else {
-                            throw new Error('TMDB API error');
-                        }
-                        
-                        // Search for TV shows
-                        let tvUrl = '';
-                        if (genre.tv) {
-                            tvUrl = `${TMDB_API_URL}/discover/tv?api_key=${TMDB_API_KEY}&with_genres=${genre.tv}`;
-                        } else if (query === 'popular') {
-                            tvUrl = `${TMDB_API_URL}/tv/popular?api_key=${TMDB_API_KEY}`;
-                        } else {
-                            tvUrl = `${TMDB_API_URL}/search/tv?api_key=${TMDB_API_KEY}&query=${query}`;
-                        }
-                        
-                        // Apply advanced filters if set
-                        if (yearValue) {
-                            if (yearValue.includes('-')) {
-                                const [start, end] = yearValue.split('-');
-                                tvUrl += `&first_air_date.gte=${start}-01-01&first_air_date.lte=${end}-12-31`;
-                            } else if (yearValue === 'before-1990') {
-                                tvUrl += '&first_air_date.lte=1989-12-31';
-                            } else {
-                                tvUrl += `&first_air_date_year=${yearValue}`;
-                            }
-                        }
-                        
-                        if (ratingValue > 0) {
-                            tvUrl += `&vote_average.gte=${ratingValue}`;
-                        }
-                        
-                        // Sort by popularity to get a mix of ratings
-                        tvUrl += '&sort_by=popularity.desc';
-                        
-                        // Get a random page to ensure variety
-                        tvUrl += `&page=${randomPage}`;
-                        
-                        const tvResponse = await fetch(tvUrl);
-                        if (tvResponse.ok) {
-                            const tvData = await tvResponse.json();
-                            
-                            // Process TV results
-                            if (tvData && tvData.results && tvData.results.length > 0) {
-                                // Filter out recently shown TV shows
-                                const availableTvShows = tvData.results.filter(tv => 
-                                    !recentlyShownItems.includes(`tv-${tv.id}`)
-                                );
-                                
-                                // If we don't have enough TV shows, reset the recently shown list
-                                if (availableTvShows.length < 6) {
-                                    recentlyShownItems = recentlyShownItems.filter(id => !id.startsWith('tv-'));
-                                }
-                                
-                                const tvToShow = availableTvShows.length > 0 ? availableTvShows : tvData.results;
-                                
-                                for (const item of getRandomItems(tvToShow, 6)) {
-                                    if (!usedIds.has(`tv-${item.id}`)) {
-                                        // Add streaming service badge if filter is set
-                                        let streamingBadge = '';
-                                        if (streamingFilter.value) {
-                                            streamingBadge = `<span class="streaming-badge ${streamingFilter.value}">${streamingServices[streamingFilter.value]}</span>`;
-                                        }
-                                        
-                                        currentResults.push({
-                                            type: 'tv',
-                                            data: {
-                                                id: `tv-${item.id}`,
-                                                title: item.name,
-                                                year: item.first_air_date ? new Date(item.first_air_date).getFullYear() : 'N/A',
-                                                poster: item.poster_path ? `${TMDB_IMAGE_BASE}${item.poster_path}` : PLACEHOLDER_IMAGE,
-                                                rating: item.vote_average ? item.vote_average : 'N/A',
-                                                plot: item.overview ? item.overview : 'No description available',
-                                                type: 'tv',
-                                                country: item.original_language ? item.original_language.toUpperCase() : 'Unknown',
-                                                bingeScore: Math.floor(Math.random() * 20) + 75, // Random binge score between 75-95
-                                                streaming: streamingBadge
-                                            }
-                                        });
-                                        usedIds.add(`tv-${item.id}`);
-                                        recentlyShownItems.push(`tv-${item.id}`);
-                                    }
-                                }
-                            } else {
-                                console.log('No TV results from TMDB API');
-                            }
-                        } else {
-                            throw new Error('TMDB API error');
-                        }
-                        
-                        tmdbStatus.className = 'status-dot status-online';
-                        
-                        // Show load more button if there are more pages
-                        loadMoreBtn.style.display = 'block';
-                        
-                        showToast(`Found ${currentResults.length} items`, 'success');
-                    } catch (tmdbError) {
-                        console.error('TMDB API error:', tmdbError);
-                        tmdbStatus.className = 'status-dot status-offline';
-                        loadMoreBtn.style.display = 'none';
-                        showToast('TMDB API is temporarily unavailable', 'error');
-                    }
-                    
-                    // Store recently shown items in localStorage (keep only last 50)
-                    if (recentlyShownItems.length > 50) {
-                        recentlyShownItems = recentlyShownItems.slice(recentlyShownItems.length - 50);
-                    }
-                    localStorage.setItem('recentlyShownItems', JSON.stringify(recentlyShownItems));
-                    
-                    if (currentResults.length > 0) {
-                        displayResults(currentResults);
-                    } else {
-                        noResultsElement.style.display = 'block';
-                        resultsTitle.textContent = 'No Results Found';
-                        showToast('No results found for your search', 'error');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    errorElement.style.display = 'block';
-                    showToast('An error occurred during search', 'error');
-                } finally {
-                    loadingElement.style.display = 'none';
-                    instructions.style.display = 'none';
-                    
-                    // Lazy load images after a short delay
-                    setTimeout(lazyLoadImages, 100);
-                }
-            }
-            
-            // Helper function to get random items from array
-            function getRandomItems(array, count) {
-                const shuffled = [...array].sort(() => 0.5 - Math.random());
-                return shuffled.slice(0, Math.min(count, shuffled.length));
-            }
-            
-            // Function to display results
-            function displayResults(results) {
-                const filteredResults = results.filter(item => {
-                    if (activeFilter === 'all') return true;
-                    if (activeFilter === 'movie') return item.data.type === 'movie';
-                    if (activeFilter === 'tv') return item.data.type === 'tv';
-                    if (activeFilter === 'high-rated') return item.data.rating >= 8.0;
-                    return true;
-                });
-                
-                if (filteredResults.length === 0) {
-                    noResultsElement.style.display = 'block';
-                    resultsTitle.textContent = 'No Matching Results';
-                    return;
-                }
-                
-                filteredResults.forEach((item, index) => {
-                    // Skip if already displayed (for pagination)
-                    if (document.getElementById(`card-${item.data.id}`)) {
-                        return;
-                    }
-                    
-                    const card = document.createElement('div');
-                    card.classList.add('card');
-                    card.style.animationDelay = `${index * 0.1}s`;
-                    card.setAttribute('role', 'listitem');
-                    card.id = `card-${item.data.id}`;
-                    
-                    const data = item.data;
-                    const title = data.title || 'Unknown Title';
-                    const year = data.year || 'N/A';
-                    const image = data.poster || PLACEHOLDER_IMAGE;
-                    const plot = data.plot || 'No description available';
-                    const rating = data.rating !== 'N/A' ? data.rating : 'N/A';
-                    const type = data.type || 'tv';
-                    const country = data.country || 'Unknown';
-                    const bingeScore = data.bingeScore || Math.floor(Math.random() * 20) + 75;
-                    const streamingBadge = data.streaming || '';
-                    
-                    // Check if item is saved
-                    const isSaved = savedItems.some(savedItem => savedItem.id === data.id);
-                    
-                    // Shorten plot if too long
-                    const shortenedPlot = plot.length > 120 ? plot.substring(0, 120) + '...' : plot;
-                    
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <button class="save-btn ${isSaved ? 'saved' : ''}" data-id="${data.id}" data-type="${type}" aria-label="${isSaved ? 'Remove from saved' : 'Save for later'}">
-                                <i class="fas ${isSaved ? 'fa-bookmark' : 'fa-bookmark-o'}"></i>
-                            </button>
-                            <img data-src="${image}" alt="${title}" class="poster" src="${PLACEHOLDER_IMAGE}">
-                            <span class="type-badge ${type === 'movie' ? 'movie-type' : 'tv-type'}">${type === 'movie' ? 'Movie' : 'TV Show'}</span>
-                        </div>
-                        <div class="info">
-                            <h2 class="title">${title} ${streamingBadge}</h2>
-                            <p class="year">${year} • ${country}</p>
-                            <p class="plot">${shortenedPlot}</p>
-                            <div class="binge-meter">
-                                <div class="binge-meter-fill" style="width: ${bingeScore}%"></div>
-                            </div>
-                            <div class="details">
-                                <span>Binge Score: ${bingeScore}%</span>
-                                <span class="rating"><i class="fas fa-star"></i> ${rating}</span>
-                            </div>
-                        </div>
-                    `;
-                    
-                    resultsContainer.appendChild(card);
-                    
-                    // Add event listener to save button
-                    const saveBtn = card.querySelector('.save-btn');
-                    saveBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        toggleSaveItem(data);
-                    });
-                });
-            }
-            
-            // NEW: Toggle save item
-            function toggleSaveItem(item) {
-                const index = savedItems.findIndex(savedItem => savedItem.id === item.id);
-                
-                if (index === -1) {
-                    // Item not saved, add it
-                    savedItems.push(item);
-                    showToast(`"${item.title}" saved for later`, 'success');
-                } else {
-                    // Item already saved, remove it
-                    savedItems.splice(index, 1);
-                    showToast(`"${item.title}" removed from saved`, 'success');
-                }
-                
-                // Update localStorage
-                localStorage.setItem('savedBingeItems', JSON.stringify(savedItems));
-                
-                // Update UI
-                updateSaveButtons();
-                displaySavedItems();
-            }
-            
-            // NEW: Update save buttons state
-            function updateSaveButtons() {
-                document.querySelectorAll('.save-btn').forEach(btn => {
-                    const id = btn.dataset.id;
-                    const isSaved = savedItems.some(item => item.id === id);
-                    
-                    if (isSaved) {
-                        btn.classList.add('saved');
-                        btn.innerHTML = '<i class="fas fa-bookmark"></i>';
-                        btn.setAttribute('aria-label', 'Remove from saved');
-                    } else {
-                        btn.classList.remove('saved');
-                        btn.innerHTML = '<i class="fas fa-bookmark-o"></i>';
-                        btn.setAttribute('aria-label', 'Save for later');
-                    }
-                });
-            }
-            
-            // NEW: Display saved items
-            function displaySavedItems() {
-                savedContainer.innerHTML = '';
-                
-                if (savedItems.length === 0) {
-                    savedContainer.innerHTML = `
-                        <div class="no-results" style="display: block;">
-                            <i class="fas fa-bookmark" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
-                            <h3>No saved items yet</h3>
-                            <p>Save shows and movies to watch them later</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                savedItems.forEach((item, index) => {
-                    const card = document.createElement('div');
-                    card.classList.add('card');
-                    card.style.animationDelay = `${index * 0.1}s`;
-                    card.setAttribute('role', 'listitem');
-                    
-                    const title = item.title || 'Unknown Title';
-                    const year = item.year || 'N/A';
-                    const image = item.poster || PLACEHOLDER_IMAGE;
-                    const plot = item.plot || 'No description available';
-                    const rating = item.rating !== 'N/A' ? item.rating : 'N/A';
-                    const type = item.type || 'tv';
-                    const country = item.country || 'Unknown';
-                    const bingeScore = item.bingeScore || Math.floor(Math.random() * 20) + 75;
-                    const streamingBadge = item.streaming || '';
-                    
-                    // Shorten plot if too long
-                    const shortenedPlot = plot.length > 120 ? plot.substring(0, 120) + '...' : plot;
-                    
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <button class="save-btn saved" data-id="${item.id}" data-type="${type}" aria-label="Remove from saved">
-                                <i class="fas fa-bookmark"></i>
-                            </button>
-                            <img data-src="${image}" alt="${title}" class="poster" src="${PLACEHOLDER_IMAGE}">
-                            <span class="type-badge ${type === 'movie' ? 'movie-type' : 'tv-type'}">${type === 'movie' ? 'Movie' : 'TV Show'}</span>
-                        </div>
-                        <div class="info">
-                            <h2 class="title">${title} ${streamingBadge}</h2>
-                            <p class="year">${year} • ${country}</p>
-                            <p class="plot">${shortenedPlot}</p>
-                            <div class="binge-meter">
-                                <div class="binge-meter-fill" style="width: ${bingeScore}%"></div>
-                            </div>
-                            <div class="details">
-                                <span>Binge Score: ${bingeScore}%</span>
-                                <span class="rating"><i class="fas fa-star"></i> ${rating}</span>
-                            </div>
-                        </div>
-                    `;
-                    
-                    savedContainer.appendChild(card);
-                    
-                    // Add event listener to save button
-                    const saveBtn = card.querySelector('.save-btn');
-                    saveBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        toggleSaveItem(item);
-                    });
-                });
-                
-                // Lazy load images
-                setTimeout(lazyLoadImages, 100);
-            }
-            
-            // Update filter button accessibility attributes
-            function updateFilterButtons() {
-                filterButtons.forEach(button => {
-                    if (button.dataset.type === activeFilter) {
-                        button.setAttribute('aria-pressed', 'true');
-                    } else {
-                        button.setAttribute('aria-pressed', 'false');
-                    }
-                });
-            }
-            
-            // Event listeners
-            searchBtn.addEventListener('click', () => {
-                const query = searchInput.value.trim().toLowerCase();
-                if (query.length > 0) {
-                    searchEntertainment(query);
-                } else {
-                    showToast('Please enter a search term', 'error');
-                    searchInput.focus();
-                }
-            });
-            
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const query = searchInput.value.trim().toLowerCase();
-                    if (query.length > 0) {
-                        searchEntertainment(query);
-                    } else {
-                        showToast('Please enter a search term', 'error');
-                        searchInput.focus();
-                        autocomplete.style.display = 'none';
-                        e.preventDefault();
-                        return false;
-                    }
-                }
-            });
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    activeFilter = button.dataset.type;
-                    updateFilterButtons();
-                    
-                    if (currentResults.length > 0) {
-                        displayResults(currentResults);
-                        showToast(`Filtered by ${activeFilter}`, 'success');
-                    }
-                });
-                
-                // Add keyboard support for filter buttons
-                button.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        button.click();
-                        e.preventDefault();
-                    }
-                });
-            });
-            
-            // Add event listeners to recommendation bubbles
-            bubbles.forEach(bubble => {
-                bubble.addEventListener('click', () => {
-                    const searchTerm = bubble.dataset.search;
-                    searchInput.value = bubble.textContent;
-                    searchEntertainment(searchTerm);
-                });
-                
-                // Add keyboard support for bubbles
-                bubble.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        bubble.click();
-                        e.preventDefault();
-                    }
-                });
-            });
-            
-            // NEW: Load more button
-            loadMoreBtn.addEventListener('click', () => {
-                searchEntertainment(currentQuery, currentPage + 1);
-            });
-            
-            // NEW: View toggle
-            viewResultsBtn.addEventListener('click', () => {
+            viewResultsBtn.addEventListener('click', function() {
                 viewResultsBtn.classList.add('active');
                 viewSavedBtn.classList.remove('active');
                 resultsSection.style.display = 'block';
-                savedSection.classList.remove('visible');
+                savedSection.style.display = 'none';
             });
             
-            viewSavedBtn.addEventListener('click', () => {
+            viewSavedBtn.addEventListener('click', function() {
                 viewSavedBtn.classList.add('active');
                 viewResultsBtn.classList.remove('active');
                 resultsSection.style.display = 'none';
-                savedSection.classList.add('visible');
-                displaySavedItems();
+                savedSection.style.display = 'block';
             });
             
-            // NEW: Toggle advanced filters
-            toggleFiltersBtn.addEventListener('click', () => {
-                advancedFilters.classList.toggle('visible');
-                if (advancedFilters.classList.contains('visible')) {
-                    toggleFiltersBtn.innerHTML = '<i class="fas fa-times"></i> Close Filters';
+            // Search functionality
+            const searchBtn = document.getElementById('search-btn');
+            searchBtn.addEventListener('click', function() {
+                const searchInput = document.getElementById('search-input');
+                if (searchInput.value.trim() === '') {
+                    showToast('Please enter a search term', 'error');
+                    searchInput.focus();
                 } else {
-                    toggleFiltersBtn.innerHTML = '<i class="fas fa-sliders-h"></i> Advanced Filters';
+                    showToast('Searching for: ' + searchInput.value);
+                    // In a real implementation, this would trigger API search
                 }
             });
             
-            // NEW: Apply advanced filters
-            yearFilter.addEventListener('change', applyAdvancedFilters);
-            ratingFilter.addEventListener('change', applyAdvancedFilters);
-            streamingFilter.addEventListener('change', applyAdvancedFilters);
-            
-            function applyAdvancedFilters() {
-                if (currentQuery) {
-                    searchEntertainment(currentQuery);
-                    showToast('Filters applied', 'success');
-                }
+            // Toast notification function
+            function showToast(message, type = 'success') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = `toast ${type}`;
+                toast.style.display = 'flex';
+                
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 300);
+                }, 3000);
             }
-            
-            // Initialize API status
-            tmdbStatus.className = 'status-dot status-loading';
-            
-            // Pre-load popular content on first load
-            searchEntertainment('popular');
-            
-            // Update filter buttons accessibility on load
-            updateFilterButtons();
-            
-            // Display saved items if any
-            displaySavedItems();
         });
     </script>
 </body>
