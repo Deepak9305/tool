@@ -10,6 +10,11 @@
     
     <link rel="canonical" href="https://YOUR-FINAL-URL.com/" />
     <meta name="robots" content="index, follow">
+    
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7381421031784616"
+     crossorigin="anonymous"></script>
+
     <meta property="og:title" content="PickMyBinge | Find Your Next Binge-Worthy Show">
     <meta property="og:description" content="Instantly discover movies and TV shows you'll love with our smart recommendation engine.">
     <meta property="og:type" content="website">
@@ -99,7 +104,7 @@
         .type-badge { position: absolute; top: 15px; right: 15px; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; z-index: 2; }
         .movie-type { background: var(--primary); }
         .tv-type { background: var(--secondary); }
-        .ad-space { background: rgba(0, 0, 0, 0.2); border: 1px dashed var(--gray); display: flex; align-items: center; justify-content: center; color: var(--gray); margin: 20px auto; border-radius: 10px; }
+        .ad-space { background: rgba(0, 0, 0, 0.2); border: 1px dashed var(--gray); display: flex; align-items: center; justify-content: center; color: var(--gray); margin: 20px auto; border-radius: 10px; overflow: hidden;}
         .ad-leaderboard { width: 728px; height: 90px; max-width: 100%; }
         .ad-in-feed { width: 100%; min-height: 250px; margin: 0; }
         .load-more { margin: 30px auto; padding: 12px 30px; background: rgba(255, 255, 255, 0.1); color: var(--light); border-radius: 25px; cursor: pointer; display: none; }
@@ -200,7 +205,18 @@
                 </div>
             </section>
         
-            <div class="ad-space ad-leaderboard" id="ad-space-1">Leaderboard Ad (728x90)</div>
+            <div class="ad-space ad-leaderboard" id="ad-space-1">
+                <!-- AdSense Leaderboard Ad Unit -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7381421031784616"
+                     data-ad-slot="YOUR_AD_SLOT_ID_HERE"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
         
             <section class="results-section" id="results-section" aria-labelledby="results-title">
                 <h2 class="section-title" id="results-title">Recommended For You</h2>
@@ -215,7 +231,18 @@
                 <p>Whether you're looking for a laugh-out-loud comedy, a high-octane action blockbuster, a heartwarming Bollywood musical, or an addictive Korean drama, PickMyBinge has you covered. Our smart engine filters thousands of titles to bring you the best, top-rated content you can watch right now. Stop scrolling and start watching!</p>
             </section>
         
-            <div class="ad-space ad-leaderboard" id="ad-space-4">Footer Ad (728x90)</div>
+            <div class="ad-space ad-leaderboard" id="ad-space-4">
+                <!-- AdSense Footer Ad Unit -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7381421031784616"
+                     data-ad-slot="YOUR_AD_SLOT_ID_HERE"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
         </main>
         
         <section id="faq-section" class="static-content-section">
