@@ -1,4 +1,6 @@
+Tell all search engine crawlers that they are allowed to crawl the entire site.
 User-agent: *
-Allow: /
+Disallow:
 
-Sitemap: https://deepak9305.github.io/tool/sitemap.xml
+Provide the full location of the sitemap file.
+Sitemap: https://www.google.com/url?sa=E&source=gmail&q=https://www.pickmybinge.com/sitemap.xml
