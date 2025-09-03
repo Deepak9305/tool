@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <!-- Home Page -->
-   <url>
-      <loc>https://deepak9305.github.io/tool/</loc>
-      <priority>1.0</priority>
-   </url>
 
-   <!-- Privacy Policy -->
-   <url>
-      <loc>https://deepak9305.github.io/tool/privacy.html</loc>
-      <priority>0.8</priority>
-   </url>
+<urlset xmlns="[suspicious link removed]">
 
-   <!-- Terms of Service -->
-   <url>
-      <loc>https://deepak9305.github.io/tool/terms.html</loc>
-      <priority>0.8</priority>
-   </url>
+<!-- Homepage - Highest Priority -->
 
-   <!-- Contact Us -->
-   <url>
-      <loc>https://deepak9305.github.io/tool/contact.html</loc>
-      <priority>0.7</priority>
-   </url>
+<url>
+<loc>https://www.google.com/search?q=https://YOUR-FINAL-URL.com/index.html</loc>
+<lastmod>2025-09-03</lastmod>
+<priority>1.00</priority>
+</url>
+
+<!-- Cringe Finder Tool - High Priority -->
+
+<url>
+<loc>https://www.google.com/search?q=https://YOUR-FINAL-URL.com/cringe.html</loc>
+<lastmod>2025-09-03</lastmod>
+<priority>0.80</priority>
+</url>
+
+<!-- Other Static Pages - Lower Priority -->
+
+<url>
+<loc>https://www.google.com/search?q=https://YOUR-FINAL-URL.com/privacy.html</loc>
+<lastmod>2025-09-03</lastmod>
+<priority>0.50</priority>
+</url>
+<url>
+<loc>https://www.google.com/search?q=https://YOUR-FINAL-URL.com/terms.html</loc>
+<lastmod>2025-09-03</lastmod>
+<priority>0.50</priority>
+</url>
+<url>
+<loc>https://www.google.com/search?q=https://YOUR-FINAL-URL.com/contact.html</loc>
+<lastmod>2025-09-03</lastmod>
+<priority>0.50</priority>
+</url>
+
 </urlset>
