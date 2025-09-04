@@ -1,43 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<urlset xmlns="[suspicious link removed]">
-
-<!-- Homepage - Highest Priority -->
+<urlset
+xmlns="[suspicious link removed]"
+xmlns:xsi="https://www.google.com/search?q=http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="[suspicious link removed]
+[suspicious link removed]">
 
 <url>
-<loc>https://www.pickmybinge.com/index.html</loc>
-<lastmod>2025-09-03</lastmod>
+<loc>https://www.pickmybinge.com/</loc>
+<lastmod>2025-09-04T22:10:00+05:30</lastmod>
 <priority>1.00</priority>
 </url>
-
-<!-- Cringe Finder Tool - High Priority -->
-
 <url>
-<loc>https://www.google.com/search?q=https://www.pickmybinge.com/cringe.html</loc>
-<lastmod>2025-09-03</lastmod>
+<loc>https://www.pickmybinge.com/cringe.html</loc>
+<lastmod>2025-09-04T22:10:00+05:30</lastmod>
 <priority>0.80</priority>
 </url>
-
-<!-- Other Static Pages - Lower Priority -->
-
 <url>
-<loc>https://www.pickmybinge.com/privacy.html</loc>
-<lastmod>2025-09-03</lastmod>
-<priority>0.50</priority>
-</url>
-<url>
-<loc>https://www.pickmybinge.com/terms.html</loc>
-<lastmod>2025-09-03</lastmod>
-<priority>0.50</priority>
-</url>
-<url>
-<loc>https://www.pickmybinge.com/contact.html</loc>
-<lastmod>2025-09-03</lastmod>
-<priority>0.50</priority>
-</url>
-
-</urlset>
-<priority>0.50</priority>
+<loc>https://www.google.com/search?q=https://www.pickmybinge.com/quiz.html</loc>
+<lastmod>2025-09-04T22:10:00+05:30</lastmod>
+<priority>0.80</priority>
 </url>
 
 </urlset>
