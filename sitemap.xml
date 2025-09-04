@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<urlset
-xmlns="[suspicious link removed]"
-xmlns:xsi="https://www.google.com/search?q=http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="[suspicious link removed]
-[suspicious link removed]">
-
+<urlset xmlns="[suspicious link removed]">
 <url>
 <loc>https://www.pickmybinge.com/</loc>
-<lastmod>2025-09-04T22:10:00+05:30</lastmod>
-<priority>1.00</priority>
+<lastmod>2025-09-04</lastmod>
+<priority>1.0</priority>
 </url>
 <url>
 <loc>https://www.pickmybinge.com/cringe.html</loc>
-<lastmod>2025-09-04T22:10:00+05:30</lastmod>
-<priority>0.80</priority>
+<lastmod>2025-09-04</lastmod>
+<priority>0.8</priority>
 </url>
 <url>
 <loc>https://www.google.com/search?q=https://www.pickmybinge.com/quiz.html</loc>
-<lastmod>2025-09-04T22:10:00+05:30</lastmod>
-<priority>0.80</priority>
+<lastmod>2025-09-04</lastmod>
+<priority>0.8</priority>
 </url>
-
 </urlset>
