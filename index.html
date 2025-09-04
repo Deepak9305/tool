@@ -8,7 +8,7 @@
     
     <meta name="description" content="Tired of endless scrolling? PickMyBinge helps you discover your next favorite movie or TV show. Get personalized recommendations for Action, Comedy, Korean dramas, and more.">
     
-    <link rel="canonical" href="https://YOUR-FINAL-URL.com/" />
+    <link rel="canonical" href="https://www.pickmybinge.com/" />
     <meta name="robots" content="index, follow">
     
     <!-- Google AdSense Script -->
@@ -18,21 +18,21 @@
     <meta property="og:title" content="PickMyBinge | Find Your Next Binge-Worthy Show">
     <meta property="og:description" content="Instantly discover movies and TV shows you'll love with our smart recommendation engine.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://YOUR-FINAL-URL.com/">
-    <meta property="og:image" content="https://YOUR-FINAL-URL.com/social-preview.png">
+    <meta property="og:url" content="https://www.pickmybinge.com/">
+    <meta property="og:image" content="https://www.pickmybinge.com/social-preview.png">
     <meta name="twitter:card" content="summary_large_image">
 
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "PickMyBinge.com",
-        "url": "https://YOUR-FINAL-URL.com/",
+        "name": "PickMyBinge",
+        "url": "https://www.pickmybinge.com/",
         "potentialAction": {
             "@type": "SearchAction",
             "target": {
               "@type": "EntryPoint",
-              "urlTemplate": "https://YOUR-FINAL-URL.com/?q={search_term_string}"
+              "urlTemplate": "https://www.pickmybinge.com/?q={search_term_string}"
             },
             "query-input": "required name=search_term_string"
         },
@@ -43,20 +43,29 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "https://www.pickmybinge.com/",
+      "logo": "https://www.pickmybinge.com/logo.png"
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [{
         "@type": "Question",
-        "name": "What is PickMyBinge.com?",
+        "name": "What is PickMyBinge?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "PickMyBinge.com is a smart recommendation tool designed to help you quickly discover binge-worthy movies and TV shows. We use filters for genre, popularity, and ratings to help you stop scrolling and start watching."
+          "text": "PickMyBinge is a smart recommendation tool designed to help you quickly discover binge-worthy movies and TV shows. We use filters for genre, popularity, and ratings to help you stop scrolling and start watching."
         }
       },{
         "@type": "Question",
         "name": "Is this website free to use?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, PickMyBinge.com is 100% free for everyone. The site is supported by on-page advertisements and affiliate links, which means we may earn a small commission if you sign up for a service we recommend, at no extra cost to you."
+          "text": "Yes, PickMyBinge is 100% free for everyone. The site is supported by on-page advertisements and affiliate links, which means we may earn a small commission if you sign up for a service we recommend, at no extra cost to you."
         }
       },{
         "@type": "Question",
@@ -64,6 +73,20 @@
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Our data, including titles, posters, ratings, and release dates, is generously provided by The Movie Database (TMDB). It is a massive, community-built database that ensures our recommendations are always up-to-date."
+        }
+      },{
+        "@type": "Question",
+        "name": "How do the recommendations work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our recommendation engine sorts content by popularity and high user ratings from millions of viewers. When you select a genre, it finds the most-loved titles in that category, helping you discover proven hits you're likely to enjoy."
+        }
+      },{
+        "@type": "Question",
+        "name": "How often is the content updated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our movie and TV show library is updated daily through a direct connection with The Movie Database (TMDB), a live, community-driven database. This ensures you always have access to the latest and most popular titles."
         }
       }]
     }
@@ -73,30 +96,39 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         :root { --primary: #FF5E5B; --secondary: #00CECB; --dark: #1E1E2E; --light: #FDFFFC; --accent: #FFC53D; --gray: #8B8BA0; }
-        body { background: linear-gradient(135deg, var(--dark), #2D3047); color: var(--light); min-height: 100vh; padding: 20px; line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        header { text-align: center; padding: 30px 0; }
-        h1 { font-size: 3.5rem; margin-bottom: 10px; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .tagline { color: var(--gray); font-size: 1.1rem; }
-        .special-feature-link { margin-top: 20px; padding: 10px 20px; border: 1px solid var(--accent); border-radius: 50px; display: inline-block; background: rgba(255, 197, 61, 0.1); transition: all 0.3s ease; }
+        body { background: linear-gradient(135deg, var(--dark), #2D3047); color: var(--light); min-height: 100vh; padding: 0; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .logo img { height: 40px; }
+        .hero-section { text-align: center; padding: 40px 0; }
+        h1 { font-size: 3.5rem; margin-bottom: 10px; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px rgba(255, 197, 61, 0.2); }
+        .tagline { color: var(--gray); font-size: 1.1rem; margin-bottom: 30px; }
+        .promo-section { text-align: center; margin-bottom: 40px; }
+        .promo-text { color: var(--light); font-size: 1.1rem; margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .special-feature-link { padding: 12px 25px; border: 1px solid var(--accent); border-radius: 50px; display: inline-block; background: rgba(255, 197, 61, 0.1); transition: all 0.3s ease; }
         .special-feature-link a { color: var(--accent); text-decoration: none; font-weight: bold; }
         .special-feature-link:hover { background: rgba(255, 197, 61, 0.2); transform: scale(1.05); }
-        .search-container { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; margin: 30px auto; max-width: 800px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 20px; }
+        .search-container { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; margin: 0 auto 30px; max-width: 800px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 20px; }
         .search-controls { display: flex; gap: 15px; flex-wrap: wrap; }
         #search-input { flex-grow: 1; padding: 18px 25px; border: none; border-radius: 50px; font-size: 1rem; background: rgba(30, 30, 46, 0.7); color: var(--light); }
         #search-input:focus { outline: none; box-shadow: 0 0 0 2px var(--secondary); }
-        #search-btn { padding: 0 30px; border: none; border-radius: 50px; background: var(--primary); color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        #search-btn { padding: 0 30px; border: none; border-radius: 50px; background: linear-gradient(to right, #FF5E5B, #d94645); color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: transform 0.2s ease; }
+        #search-btn:hover { transform: scale(1.05); }
         .search-wrapper { position: relative; flex-grow: 1; }
         #type-filter { padding: 0 25px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; font-size: 1rem; background: rgba(30, 30, 46, 0.7); color: var(--light); cursor: pointer; }
         #type-filter:focus { outline: none; box-shadow: 0 0 0 2px var(--secondary); }
         .recommendation-bubbles { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin: 20px 0 40px; }
-        .bubble { padding: 12px 25px; border-radius: 30px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
-        .bubble:hover, .bubble.active { background: rgba(255, 197, 61, 0.2); color: var(--accent); border-color: var(--accent); }
+        .bubble { padding: 12px 25px; border-radius: 30px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: all 0.2s ease-in-out; }
+        .bubble:hover { transform: translateY(-3px); background: rgba(255, 255, 255, 0.1); }
+        .bubble.active { background: rgba(255, 197, 61, 0.2); color: var(--accent); border-color: var(--accent); font-weight: bold; }
         .section-title { font-size: 2rem; margin-bottom: 25px; }
         .recommendation-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
-        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 15px; overflow: hidden; }
-        .poster { width: 100%; height: 380px; object-fit: cover; }
-        .info { padding: 20px; }
+        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 15px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+        .card-header { position: relative; }
+        .card-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 50%; background: linear-gradient(to top, rgba(30, 30, 46, 0.9), transparent); }
+        .poster { width: 100%; height: 380px; object-fit: cover; display: block; }
+        .info { padding: 20px; position: relative; }
         .title { font-size: 1.3rem; margin-bottom: 8px; }
         .year { color: var(--accent); font-size: 0.9rem; }
         .details { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
@@ -106,18 +138,13 @@
         .tv-type { background: var(--secondary); }
         .ad-space { background: rgba(0, 0, 0, 0.2); border: 1px dashed var(--gray); display: flex; align-items: center; justify-content: center; color: var(--gray); margin: 20px auto; border-radius: 10px; overflow: hidden;}
         .ad-leaderboard { width: 728px; height: 90px; max-width: 100%; }
-        .ad-in-feed { width: 100%; min-height: 250px; margin: 0; }
         .load-more { margin: 30px auto; padding: 12px 30px; background: rgba(255, 255, 255, 0.1); color: var(--light); border-radius: 25px; cursor: pointer; display: none; }
         footer { text-align: center; margin-top: 60px; padding: 30px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); }
         footer a { color: var(--gray); text-decoration: none; margin: 0 10px; }
         footer a:hover { color: var(--secondary); }
         .no-results { text-align: center; margin: 40px 0; display: none; }
-        .toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; background: var(--dark); color: var(--light); z-index: 1000; transform: translateY(100px); opacity: 0; transition: all 0.3s ease; }
-        .toast.show { transform: translateY(0); opacity: 1; }
-        .toast.error { border-left: 4px solid var(--primary); }
         .static-content-section { text-align: center; max-width: 800px; margin: 60px auto; padding: 0 20px; }
         .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
-        
         .faq-container { display: flex; flex-direction: column; gap: 15px; text-align: left; }
         .faq-item { background: rgba(255, 255, 255, 0.05); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
         .faq-question { padding: 20px; font-weight: bold; cursor: pointer; position: relative; }
@@ -126,36 +153,33 @@
         .faq-item[open] .faq-question::after { transform: rotate(45deg); }
         .faq-answer { padding: 0 20px 20px; color: var(--gray); }
 
-        /* Mobile Friendliness Improvements */
+        /* New Menu Styles */
+        .main-nav { position: relative; }
+        .menu-btn { background: none; border: none; color: var(--light); font-size: 1.5rem; cursor: pointer; z-index: 1001; }
+        .nav-menu { display: none; position: absolute; right: 0; top: calc(100% + 10px); background-color: #2D3047; min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 100; border-radius: 10px; overflow: hidden; animation: slideDown 0.3s ease-out; }
+        .nav-menu a { color: var(--light); padding: 15px 20px; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .nav-menu a i { width: 20px; text-align: center; }
+        .nav-menu a:hover { background-color: var(--primary); }
+        .main-nav.show .nav-menu { display: block; }
+        .close-btn { display: none; }
+        
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
         @media (max-width: 768px) {
-             .search-controls {
-                flex-direction: column;
-            }
-            #search-btn, #type-filter {
-                width: 100%;
-                justify-content: center;
-                padding-top: 18px;
-                padding-bottom: 18px;
-            }
+            h1 { font-size: 2.8rem; }
+            .search-controls { flex-direction: column; }
+            #search-btn, #type-filter { width: 100%; justify-content: center; padding-top: 18px; padding-bottom: 18px; }
+            .nav-menu { display: flex; flex-direction: column; position: fixed; top: 0; right: 0; width: 80%; max-width: 300px; height: 100vh; background: var(--dark); z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease-in-out; box-shadow: -5px 0 15px rgba(0,0,0,0.3); }
+            .main-nav.show .nav-menu { transform: translateX(0); }
+            .nav-menu a { font-size: 1.2rem; padding: 20px; border-bottom: 1px solid var(--gray); }
+            .close-btn { display: block; color: var(--light); font-size: 2rem; position: absolute; top: 15px; right: 20px; background: none; border: none; cursor: pointer; }
         }
 
         @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-            h1 {
-                font-size: 2.5rem;
-            }
-            .section-title {
-                font-size: 1.5rem;
-            }
-            .search-container {
-                padding: 20px;
-            }
-            .bubble {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
+            h1 { font-size: 2.2rem; }
+            .section-title { font-size: 1.5rem; }
+            .search-container { padding: 20px; }
+            .bubble { padding: 10px 18px; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -165,14 +189,30 @@
             <div class="logo">
                 <a href="index.html"><img src="logo.png" alt="PickMyBinge Logo" width="150"></a>
             </div>
-            <h1>Find Your Next Binge-Worthy Show or Movie</h1>
-            <p class="tagline">Instantly discover top-rated content across all your favorite genres</p>
-            <div class="special-feature-link">
-                <a href="cringe.html">😈 Dare to Watch? Find the Cringiest Movies of All Time</a>
-            </div>
+            <nav class="main-nav">
+                <button class="menu-btn"><i class="fas fa-bars"></i></button>
+                <div class="nav-menu">
+                    <button class="close-btn">&times;</button>
+                    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                    <a href="cringe.html"><i class="fas fa-ghost"></i> Cringe Finder</a>
+                    <a href="quiz.html"><i class="fas fa-question-circle"></i> Character Quiz</a>
+                </div>
+            </nav>
         </header>
 
+        <div class="hero-section">
+            <h1>PickMyBinge</h1>
+            <p class="tagline">Find Your Next Binge-Worthy Show or Movie</p>
+        </div>
+
         <main>
+             <section class="promo-section">
+                 <p class="promo-text">Feeling adventurous? Sometimes the best movies are the worst ones.</p>
+                 <div class="special-feature-link">
+                     <a href="cringe.html">😈 Enter the Cringe Zone</a>
+                 </div>
+            </section>
+
             <section class="search-section" aria-labelledby="search-heading">
                 <h2 id="search-heading" class="visually-hidden">Content Search and Filtering</h2>
                 <div class="search-container">
@@ -228,7 +268,15 @@
 
             <section class="static-content-section">
                 <h2 class="section-title">Discover Recommendations for Every Mood</h2>
-                <p>Whether you're looking for a laugh-out-loud comedy, a high-octane action blockbuster, a heartwarming Bollywood musical, or an addictive Korean drama, PickMyBinge has you covered. Our smart engine filters thousands of titles to bring you the best, top-rated content you can watch right now. Stop scrolling and start watching!</p>
+                <p>Whether you're looking for a laugh-out-loud comedy, a high-octane action blockbuster, or an addictive Korean drama, PickMyBinge has you covered. Our smart engine filters thousands of titles to bring you the best, top-rated content you can watch right now. Stop scrolling and start watching!</p>
+            </section>
+
+            <section class="promo-section">
+                 <h2 class="section-title" style="font-size: 2.2rem;">Discover Your Inner Character</h2>
+                 <p class="promo-text">Ever wondered which iconic hero or villain you're most like? Take our fun personality quiz to find your comic book counterpart!</p>
+                 <div class="special-feature-link">
+                      <a href="quiz.html">🦸‍♂️ Which hero (or villain) are you? Take the Quiz!</a>
+                 </div>
             </section>
         
             <div class="ad-space ad-leaderboard" id="ad-space-4">
@@ -249,15 +297,15 @@
             <h2 class="section-title">Frequently Asked Questions</h2>
             <div class="faq-container">
                 <details class="faq-item">
-                    <summary class="faq-question">What is PickMyBinge.com?</summary>
+                    <summary class="faq-question">What is PickMyBinge?</summary>
                     <div class="faq-answer">
-                        <p>PickMyBinge.com is a smart recommendation tool designed to help you quickly discover binge-worthy movies and TV shows. We use filters for genre, popularity, and ratings to help you stop scrolling and start watching.</p>
+                        <p>PickMyBinge is a smart recommendation tool designed to help you quickly discover binge-worthy movies and TV shows. We use filters for genre, popularity, and ratings to help you stop scrolling and start watching.</p>
                     </div>
                 </details>
                 <details class="faq-item">
-                    <summary class="faq-question">Is this website free to use?</summary>
+                    <summary class="faq-question">Is PickMyBinge free to use?</summary>
                     <div class="faq-answer">
-                        <p>Yes, PickMyBinge.com is 100% free for everyone. The site is supported by on-page advertisements and affiliate links, which means we may earn a small commission if you sign up for a service we recommend, at no extra cost to you.</p>
+                        <p>Yes, PickMyBinge is 100% free for everyone. The site is supported by on-page advertisements and affiliate links, which means we may earn a small commission if you sign up for a service we recommend, at no extra cost to you.</p>
                     </div>
                 </details>
                 <details class="faq-item">
@@ -266,11 +314,23 @@
                         <p>Our data, including titles, posters, ratings, and release dates, is generously provided by The Movie Database (TMDB). It is a massive, community-built database that ensures our recommendations are always up-to-date.</p>
                     </div>
                 </details>
+                <details class="faq-item">
+                    <summary class="faq-question">How do the recommendations work?</summary>
+                    <div class="faq-answer">
+                        <p>Our recommendation engine sorts content by popularity and high user ratings from millions of viewers. When you select a genre, it finds the most-loved titles in that category, helping you discover proven hits you're likely to enjoy.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">How often is the content updated?</summary>
+                    <div class="faq-answer">
+                        <p>Our movie and TV show library is updated daily through a direct connection with The Movie Database (TMDB), a live, community-driven database. This ensures you always have access to the latest and most popular titles.</p>
+                    </div>
+                </details>
             </div>
         </section>
 
         <footer>
-            <p>PickMyBinge.com &copy; 2025</p>
+            <p>PickMyBinge &copy; 2025</p>
             <nav>
                 <a href="privacy.html">Privacy Policy</a>
                 <a href="terms.html">Terms & Conditions</a>
@@ -278,8 +338,7 @@
             </nav>
         </footer>
     </div>
-    <div class="toast" id="toast"></div>
-
+    
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchBtn = document.getElementById('search-btn');
@@ -289,21 +348,10 @@
         const typeFilter = document.getElementById('type-filter');
         const noResultsElement = document.getElementById('no-results');
         const loadMoreBtn = document.getElementById('load-more');
-        const toast = document.getElementById('toast');
         
-        const TMDB_API_KEY = '5102784aed4d28b56413afea83c2fb50'; // <-- IMPORTANT: Add your API key
+        const TMDB_API_KEY = '5102784aed4d28b56413afea83c2fb50'; 
 
-        const genreMappings = { 
-            'comedy': {movie: '35', tv: '35'}, 
-            'action': {movie: '28', tv: '10759'}, 
-            'drama': {movie: '18', tv: '18'}, 
-            'sci-fi': {movie: '878', tv: '10765'}, 
-            'thriller': {movie: '53', tv: '80'},
-            'animation': {movie: '16', tv: '16'},
-            'horror': {movie: '27', tv: '99'},
-            'romance': {movie: '10749', tv: '10749'}
-        };
-        
+        const genreMappings = { 'comedy': {movie: '35', tv: '35'}, 'action': {movie: '28', tv: '10759'}, 'drama': {movie: '18', tv: '18'}, 'sci-fi': {movie: '878', tv: '10765'}, 'thriller': {movie: '53', tv: '80'}, 'animation': {movie: '16', tv: '16'}, 'horror': {movie: '27', tv: '99'}, 'romance': {movie: '10749', tv: '10749'} };
         const languageMappings = { 'korean': 'ko' };
         
         let allFetchedResults = [];
@@ -384,8 +432,6 @@
                 return data.results.map(item => ({ id: item.id, type: type, title: type === 'movie' ? item.title : item.name, year: (type === 'movie' ? item.release_date : item.first_air_date || '').substring(0, 4), poster: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://via.placeholder.com/300x450/2D3047/8B8BA0?text=No+Image', rating: item.vote_average.toFixed(1) }));
             } catch (error) {
                 console.error('Failed to fetch data:', error);
-                showToast('Could not connect to the server.');
-                return [];
             }
         }
 
@@ -415,12 +461,6 @@
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; }
             return array;
-        }
-
-        function showToast(message, type = 'error') {
-            toast.textContent = message;
-            toast.className = `toast ${type} show`;
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
         function triggerTextSearch() {
@@ -466,7 +506,7 @@
                         bubble.classList.remove('active');
                     } else {
                         if (activeFilters.size >= 2) {
-                            showToast('You can select a maximum of 2 filters.');
+                            alert('You can select a maximum of 2 filters.');
                             return;
                         }
                         activeFilters.add(filter);
@@ -479,10 +519,31 @@
                 searchEntertainment(null, true);
             });
         });
+        
+        const menuBtn = document.querySelector('.menu-btn');
+        const closeBtn = document.querySelector('.close-btn');
+        const mainNav = document.querySelector('.main-nav');
+
+        if(menuBtn) {
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mainNav.classList.toggle('show');
+            });
+        }
+        if(closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                mainNav.classList.remove('show');
+            });
+        }
+        window.addEventListener('click', (e) => {
+            if (mainNav && !mainNav.contains(e.target)) {
+                mainNav.classList.remove('show');
+            }
+        });
+
         searchEntertainment(null, true);
     });
     </script>
 </body>
 </html>
-
 
