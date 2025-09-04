@@ -72,7 +72,10 @@
         body { background: linear-gradient(135deg, var(--dark), #2D3047); color: var(--light); min-height: 100vh; padding: 0; line-height: 1.6; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .logo img { height: 40px; }
+        .logo-container { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .logo-container img { height: 40px; }
+        .logo-container .brand-name { font-size: 1.5rem; font-weight: bold; color: var(--light); }
+
         .content-box {
             max-width: 800px;
             width: 100%;
@@ -85,7 +88,7 @@
             overflow: hidden;
             margin: 40px auto;
         }
-        
+
         #start-screen, #quiz-screen, #result-screen {
             animation: fadeIn 0.5s ease-in-out;
         }
@@ -183,21 +186,20 @@
             opacity: 0;
             animation: result-text-anim 0.5s 0.6s ease-out forwards;
         }
-        #result-character { animation-delay: 0.8s; }
-        #result-description { animation-delay: 1s; }
+        #result-character { animation-delay: 0.8s; font-size: 2.2rem; color: var(--accent); margin-bottom: 10px; }
+        #result-description { animation-delay: 1s; font-size: 1.1rem; line-height: 1.6; }
         
-        @keyframes result-card-anim {
-            to { transform: scale(1); opacity: 1; }
-        }
-        @keyframes result-text-anim {
-            to { opacity: 1; }
-        }
+        @keyframes result-card-anim { to { transform: scale(1); opacity: 1; } }
+        @keyframes result-text-anim { to { opacity: 1; } }
         
         #result-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;}
         .btn.secondary { background: var(--secondary); }
         .btn.secondary:hover { box-shadow: 0 5px 15px rgba(0, 206, 203, 0.3); }
         .back-link { display: block; margin-top: 20px; color: var(--gray); text-decoration: none; }
         .back-link:hover { color: var(--secondary); }
+        
+        .blog-content { text-align: left; line-height: 1.8; }
+        .blog-content p { margin-bottom: 20px; }
 
         .faq-container { display: flex; flex-direction: column; gap: 15px; text-align: left; }
         .faq-item { background: rgba(0, 0, 0, 0.1); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -208,8 +210,7 @@
         .faq-answer { padding: 0 20px 20px; color: var(--gray); }
         .faq-answer p { margin-bottom: 0; }
         #summary-section p { font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto;}
-        
-        /* New Menu Styles */
+
         .main-nav { position: relative; }
         .menu-btn { background: none; border: none; color: var(--light); font-size: 1.5rem; cursor: pointer; z-index: 1001; }
         .nav-menu { display: none; position: absolute; right: 0; top: calc(100% + 10px); background-color: #2D3047; min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 100; border-radius: 10px; overflow: hidden; animation: slideDown 0.3s ease-out; }
@@ -233,26 +234,26 @@
             .nav-menu a { font-size: 1.2rem; padding: 20px; border-bottom: 1px solid var(--gray); }
             .close-btn { display: block; color: var(--light); font-size: 2rem; position: absolute; top: 15px; right: 20px; background: none; border: none; cursor: pointer; }
         }
-        
+
         @media (max-width: 600px) {
             .content-box { padding: 25px; }
             h1, .section-title { font-size: 1.8rem; }
             #question-text { font-size: 1.4rem; }
             #result-character { font-size: 1.8rem; }
         }
-
+        
         footer { text-align: center; margin-top: 60px; padding: 30px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); }
         footer a { color: var(--gray); text-decoration: none; margin: 0 10px; }
         footer a:hover { color: var(--secondary); }
-
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">
-                <a href="index.html"><img src="logo.png" alt="PickMyBinge Logo" width="150"></a>
-            </div>
+            <a href="index.html" class="logo-container">
+                <img src="logo.png" alt="PickMyBinge Logo">
+                <span class="brand-name">PickMyBinge</span>
+            </a>
             <nav class="main-nav">
                 <button class="menu-btn"><i class="fas fa-bars"></i></button>
                 <div class="nav-menu">
@@ -263,7 +264,7 @@
                 </div>
             </nav>
         </header>
-
+        
         <main>
             <div class="content-box">
                 <!-- Start Screen -->
@@ -285,7 +286,7 @@
 
                 <!-- Result Screen -->
                 <div id="result-screen" style="display: none;">
-                    <p>You are...</p>
+                    <p class="result-intro">You are...</p>
                     <div id="result-card">
                         <h2 id="result-character"></h2>
                         <p id="result-description"></p>
@@ -298,10 +299,14 @@
                 </div>
             </div>
 
-            <!-- Summary Section -->
-            <section id="summary-section" class="content-box">
-                 <h2 class="section-title">Discover Your Inner Hero (or Villain!)</h2>
-                <p>Ever wondered if you're more of a brilliant strategist like Batman or a chaotic force like The Joker? Our personality quiz digs into your choices and preferences to match you with an iconic character from the DC or Marvel universes. Get ready for a fun, surprising result you can share with your friends!</p>
+            <!-- Blog Section -->
+            <section id="blog-section" class="content-box">
+                 <h2 class="section-title">The Psychology of a Hero</h2>
+                <div class="blog-content">
+                    <p>What makes a hero? This quiz explores the core of what defines the iconic characters of DC and Marvel. It's often a question of motivation. Are you driven by an unwavering sense of hope, or a burning desire for vengeance?</p>
+                    <p>Characters like <strong>Superman</strong> represent the "Hero of Hope." They are beacons of morality who believe in the inherent goodness of humanity. Their goal isn't just to stop criminals, but to inspire people to be better. In contrast, the "Hero of Vengeance," like <strong>Batman</strong> or <strong>The Wolverine</strong>, is often born from tragedy. They operate in the shadows, using fear and a strict personal code to impose justice on a world they see as corrupt.</p>
+                    <p>Neither path is inherently right or wrong, but they reveal a lot about a character's worldview. Your quiz result reflects which of these—or the many other archetypes, from chaotic villain to steadfast ally—your personality aligns with most. So, what does your result say about you?</p>
+                </div>
             </section>
 
             <!-- FAQ Section -->
@@ -331,7 +336,15 @@
         </main>
         <footer>
             <p>PickMyBinge &copy; 2025</p>
-            <nav>
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-59e852f8194f928695ada4f72d5fe9787b282d8d85f76f363d6b4bf8d9f03dcb.svg" alt="The Movie Database API" width="100">
+                </a>
+                <p style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">
+                    This product uses the TMDB API but is not endorsed or certified by TMDB.
+                </p>
+            </div>
+            <nav style="margin-top: 20px;">
                 <a href="privacy.html">Privacy Policy</a>
                 <a href="terms.html">Terms & Conditions</a>
                 <a href="contact.html">Contact Us</a>
@@ -343,16 +356,13 @@
         const startScreen = document.getElementById('start-screen');
         const quizScreen = document.getElementById('quiz-screen');
         const resultScreen = document.getElementById('result-screen');
-
         const startDcBtn = document.getElementById('start-dc-btn');
         const startMarvelBtn = document.getElementById('start-marvel-btn');
         const restartBtn = document.getElementById('restart-btn');
         const shareBtn = document.getElementById('share-btn');
-
         const progressText = document.getElementById('progress-text');
         const questionText = document.getElementById('question-text');
         const answersContainer = document.getElementById('answers');
-        
         const resultCharacter = document.getElementById('result-character');
         const resultDescription = document.getElementById('result-description');
 
@@ -390,7 +400,7 @@
             { question: "Your fighting style is best described as...", answers: [ { text: "Tactical and precise.", characters: ["captainamerica", "blackwidow", "nickfury", "spiderman"] }, { text: "Overwhelming power and advanced technology.", characters: ["ironman", "thor"] }, { text: "Savage, brutal, and up-close.", characters: ["hulk", "wolverine"] }, { text: "Cunning, deceptive, and reality-bending.", characters: ["loki", "doctorstrange", "thanos", "magneto"] } ] },
             { question: "What is your ultimate goal?", answers: [ { text: "To ensure freedom and justice for all.", characters: ["captainamerica", "spiderman"] }, { text: "To create a better future through innovation and control.", characters: ["ironman", "nickfury", "doctorstrange"] }, { text: "To bring about a new world order based on your vision.", characters: ["thanos", "magneto"] }, { text: "To find your place and protect your own, by any means.", characters: ["wolverine", "loki", "thor", "blackwidow", "hulk"] } ] }
         ];
-
+        
         const marvelCharacterResults = {
             captainamerica: { name: "Captain America", description: "You are a born leader with an unshakeable sense of right and wrong. You inspire others through your courage and selflessness, always standing up for the little guy and fighting for what you believe in, no matter the odds." },
             ironman: { name: "Iron Man", description: "You are a brilliant, witty, and resourceful genius. You solve problems with technology and a healthy dose of sarcasm. You're a futurist who is always innovating to protect the world, even if it means making tough choices." },
@@ -467,6 +477,7 @@
             const winner = winners[Math.floor(Math.random() * winners.length)];
             
             finalResult = currentCharacterResults[winner];
+            
             resultCharacter.textContent = finalResult.name;
             resultDescription.textContent = finalResult.description;
             
