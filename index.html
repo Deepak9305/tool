@@ -97,18 +97,20 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         :root { --primary: #FF5E5B; --secondary: #00CECB; --dark: #1E1E2E; --light: #FDFFFC; --accent: #FFC53D; --gray: #8B8BA0; }
         body { background: linear-gradient(135deg, var(--dark), #2D3047); color: var(--light); min-height: 100vh; padding: 0; line-height: 1.6; }
+        body.modal-open { overflow: hidden; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .logo img { height: 40px; }
+        .logo-container { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .logo-container img { height: 40px; }
+        .logo-container .brand-name { font-size: 1.5rem; font-weight: bold; color: var(--light); }
         .hero-section { text-align: center; padding: 40px 0; }
         h1 { font-size: 3.5rem; margin-bottom: 10px; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px rgba(255, 197, 61, 0.2); }
         .tagline { color: var(--gray); font-size: 1.1rem; margin-bottom: 30px; }
-        .promo-section { text-align: center; margin-bottom: 40px; }
-        .promo-text { color: var(--light); font-size: 1.1rem; margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .special-features-container { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
         .special-feature-link { padding: 12px 25px; border: 1px solid var(--accent); border-radius: 50px; display: inline-block; background: rgba(255, 197, 61, 0.1); transition: all 0.3s ease; }
         .special-feature-link a { color: var(--accent); text-decoration: none; font-weight: bold; }
         .special-feature-link:hover { background: rgba(255, 197, 61, 0.2); transform: scale(1.05); }
-        .search-container { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; margin: 0 auto 30px; max-width: 800px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 20px; }
+        .search-container { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; margin: 40px auto 30px; max-width: 800px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 20px; }
         .search-controls { display: flex; gap: 15px; flex-wrap: wrap; }
         #search-input { flex-grow: 1; padding: 18px 25px; border: none; border-radius: 50px; font-size: 1rem; background: rgba(30, 30, 46, 0.7); color: var(--light); }
         #search-input:focus { outline: none; box-shadow: 0 0 0 2px var(--secondary); }
@@ -123,12 +125,12 @@
         .bubble.active { background: rgba(255, 197, 61, 0.2); color: var(--accent); border-color: var(--accent); font-weight: bold; }
         .section-title { font-size: 2rem; margin-bottom: 25px; }
         .recommendation-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
-        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 15px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; }
+        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 15px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; border: none; padding: 0;}
         .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
         .card-header { position: relative; }
         .card-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 50%; background: linear-gradient(to top, rgba(30, 30, 46, 0.9), transparent); }
         .poster { width: 100%; height: 380px; object-fit: cover; display: block; }
-        .info { padding: 20px; position: relative; }
+        .info { padding: 20px; position: relative; text-align: left;}
         .title { font-size: 1.3rem; margin-bottom: 8px; }
         .year { color: var(--accent); font-size: 0.9rem; }
         .details { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
@@ -144,7 +146,6 @@
         footer a:hover { color: var(--secondary); }
         .no-results { text-align: center; margin: 40px 0; display: none; }
         .static-content-section { text-align: center; max-width: 800px; margin: 60px auto; padding: 0 20px; }
-        .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         .faq-container { display: flex; flex-direction: column; gap: 15px; text-align: left; }
         .faq-item { background: rgba(255, 255, 255, 0.05); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
         .faq-question { padding: 20px; font-weight: bold; cursor: pointer; position: relative; }
@@ -153,7 +154,7 @@
         .faq-item[open] .faq-question::after { transform: rotate(45deg); }
         .faq-answer { padding: 0 20px 20px; color: var(--gray); }
 
-        /* New Menu Styles */
+        /* Menu Styles */
         .main-nav { position: relative; }
         .menu-btn { background: none; border: none; color: var(--light); font-size: 1.5rem; cursor: pointer; z-index: 1001; }
         .nav-menu { display: none; position: absolute; right: 0; top: calc(100% + 10px); background-color: #2D3047; min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 100; border-radius: 10px; overflow: hidden; animation: slideDown 0.3s ease-out; }
@@ -165,14 +166,33 @@
         
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Modal Styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 2000; display: none; align-items: center; justify-content: center; animation: fadeInModal 0.3s ease-out; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: var(--dark); border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 800px; max-height: 90vh; border-radius: 15px; overflow-y: auto; animation: slideDownModal 0.4s ease-out; }
+        .modal-close { font-size: 2.5rem; color: var(--gray); position: absolute; top: 15px; right: 25px; cursor: pointer; }
+        .modal-header { position: relative; padding-top: 56.25%; background-color: #000; }
+        .modal-trailer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .modal-body { padding: 30px; }
+        .modal-title { font-size: 2.5rem; margin-bottom: 10px; }
+        .modal-genres { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .genre-tag { background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; }
+        .modal-overview { color: var(--gray); line-height: 1.8; }
+        .tmdb-link { color: var(--secondary); display: inline-block; margin-top: 20px; font-weight: bold; }
+        #modal-loader { display: flex; justify-content: center; align-items: center; min-height: 400px; color: var(--accent); font-size: 1.5rem;}
+        #modal-content { display: none; }
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDownModal { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
         @media (max-width: 768px) {
             h1 { font-size: 2.8rem; }
             .search-controls { flex-direction: column; }
             #search-btn, #type-filter { width: 100%; justify-content: center; padding-top: 18px; padding-bottom: 18px; }
-            .nav-menu { display: flex; flex-direction: column; position: fixed; top: 0; right: 0; width: 80%; max-width: 300px; height: 100vh; background: var(--dark); z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease-in-out; box-shadow: -5px 0 15px rgba(0,0,0,0.3); }
+            .nav-menu { display: flex; flex-direction: column; position: fixed; top: 0; right: 0; width: 80%; max-width: 300px; height: 100vh; z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease-in-out; box-shadow: -5px 0 15px rgba(0,0,0,0.3); }
             .main-nav.show .nav-menu { transform: translateX(0); }
             .nav-menu a { font-size: 1.2rem; padding: 20px; border-bottom: 1px solid var(--gray); }
             .close-btn { display: block; color: var(--light); font-size: 2rem; position: absolute; top: 15px; right: 20px; background: none; border: none; cursor: pointer; }
+            .modal-title { font-size: 1.8rem; }
         }
 
         @media (max-width: 600px) {
@@ -186,9 +206,10 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo">
-                <a href="index.html"><img src="logo.png" alt="PickMyBinge Logo" width="150"></a>
-            </div>
+            <a href="index.html" class="logo-container">
+                <img src="logo.png" alt="PickMyBinge Logo">
+                <span class="brand-name">PickMyBinge</span>
+            </a>
             <nav class="main-nav">
                 <button class="menu-btn"><i class="fas fa-bars"></i></button>
                 <div class="nav-menu">
@@ -201,20 +222,20 @@
         </header>
 
         <div class="hero-section">
-            <h1>PickMyBinge</h1>
-            <p class="tagline">Find Your Next Binge-Worthy Show or Movie</p>
+            <h1>Find Your Next Obsession</h1>
+            <p class="tagline">The ultimate tool for movie and TV show discovery.</p>
+             <div class="special-features-container">
+                <div class="special-feature-link">
+                    <a href="cringe.html">😈 Dare to watch the worst? Enter the Cringe Zone.</a>
+                </div>
+                <div class="special-feature-link">
+                    <a href="quiz.html">🦸‍♂️ Which hero (or villain) are you? Take the Quiz!</a>
+                </div>
+            </div>
         </div>
 
         <main>
-             <section class="promo-section">
-                 <p class="promo-text">Feeling adventurous? Sometimes the best movies are the worst ones.</p>
-                 <div class="special-feature-link">
-                     <a href="cringe.html">😈 Enter the Cringe Zone</a>
-                 </div>
-            </section>
-
             <section class="search-section" aria-labelledby="search-heading">
-                <h2 id="search-heading" class="visually-hidden">Content Search and Filtering</h2>
                 <div class="search-container">
                     <div class="search-controls">
                         <div class="search-wrapper" style="flex-grow: 1;">
@@ -246,16 +267,8 @@
             </section>
         
             <div class="ad-space ad-leaderboard" id="ad-space-1">
-                <!-- AdSense Leaderboard Ad Unit -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-7381421031784616"
-                     data-ad-slot="YOUR_AD_SLOT_ID_HERE"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7381421031784616" data-ad-slot="YOUR_AD_SLOT_ID_HERE" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
             </div>
         
             <section class="results-section" id="results-section" aria-labelledby="results-title">
@@ -270,26 +283,10 @@
                 <h2 class="section-title">Discover Recommendations for Every Mood</h2>
                 <p>Whether you're looking for a laugh-out-loud comedy, a high-octane action blockbuster, or an addictive Korean drama, PickMyBinge has you covered. Our smart engine filters thousands of titles to bring you the best, top-rated content you can watch right now. Stop scrolling and start watching!</p>
             </section>
-
-            <section class="promo-section">
-                 <h2 class="section-title" style="font-size: 2.2rem;">Discover Your Inner Character</h2>
-                 <p class="promo-text">Ever wondered which iconic hero or villain you're most like? Take our fun personality quiz to find your comic book counterpart!</p>
-                 <div class="special-feature-link">
-                      <a href="quiz.html">🦸‍♂️ Which hero (or villain) are you? Take the Quiz!</a>
-                 </div>
-            </section>
         
             <div class="ad-space ad-leaderboard" id="ad-space-4">
-                <!-- AdSense Footer Ad Unit -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-7381421031784616"
-                     data-ad-slot="YOUR_AD_SLOT_ID_HERE"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7381421031784616" data-ad-slot="YOUR_AD_SLOT_ID_HERE" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
             </div>
         </main>
         
@@ -298,40 +295,38 @@
             <div class="faq-container">
                 <details class="faq-item">
                     <summary class="faq-question">What is PickMyBinge?</summary>
-                    <div class="faq-answer">
-                        <p>PickMyBinge is a smart recommendation tool designed to help you quickly discover binge-worthy movies and TV shows. We use filters for genre, popularity, and ratings to help you stop scrolling and start watching.</p>
-                    </div>
+                    <div class="faq-answer"><p>PickMyBinge is a smart recommendation tool designed to help you quickly discover binge-worthy movies and TV shows. We use filters for genre, popularity, and ratings to help you stop scrolling and start watching.</p></div>
                 </details>
                 <details class="faq-item">
                     <summary class="faq-question">Is PickMyBinge free to use?</summary>
-                    <div class="faq-answer">
-                        <p>Yes, PickMyBinge is 100% free for everyone. The site is supported by on-page advertisements and affiliate links, which means we may earn a small commission if you sign up for a service we recommend, at no extra cost to you.</p>
-                    </div>
+                    <div class="faq-answer"><p>Yes, PickMyBinge is 100% free for everyone. The site is supported by on-page advertisements and affiliate links, which means we may earn a small commission if you sign up for a service we recommend, at no extra cost to you.</p></div>
                 </details>
                 <details class="faq-item">
                     <summary class="faq-question">How do you get your movie and TV show data?</summary>
-                    <div class="faq-answer">
-                        <p>Our data, including titles, posters, ratings, and release dates, is generously provided by The Movie Database (TMDB). It is a massive, community-built database that ensures our recommendations are always up-to-date.</p>
-                    </div>
+                    <div class="faq-answer"><p>Our data, including titles, posters, ratings, and release dates, is generously provided by The Movie Database (TMDB). It is a massive, community-built database that ensures our recommendations are always up-to-date.</p></div>
                 </details>
                 <details class="faq-item">
                     <summary class="faq-question">How do the recommendations work?</summary>
-                    <div class="faq-answer">
-                        <p>Our recommendation engine sorts content by popularity and high user ratings from millions of viewers. When you select a genre, it finds the most-loved titles in that category, helping you discover proven hits you're likely to enjoy.</p>
-                    </div>
+                    <div class="faq-answer"><p>Our recommendation engine sorts content by popularity and high user ratings from millions of viewers. When you select a genre, it finds the most-loved titles in that category, helping you discover proven hits you're likely to enjoy.</p></div>
                 </details>
                 <details class="faq-item">
                     <summary class="faq-question">How often is the content updated?</summary>
-                    <div class="faq-answer">
-                        <p>Our movie and TV show library is updated daily through a direct connection with The Movie Database (TMDB), a live, community-driven database. This ensures you always have access to the latest and most popular titles.</p>
-                    </div>
+                    <div class="faq-answer"><p>Our movie and TV show library is updated daily through a direct connection with The Movie Database (TMDB), a live, community-driven database. This ensures you always have access to the latest and most popular titles.</p></div>
                 </details>
             </div>
         </section>
 
         <footer>
             <p>PickMyBinge &copy; 2025</p>
-            <nav>
+             <div style="margin-top: 20px; text-align: center;">
+                <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-59e852f8194f928695ada4f72d5fe9787b282d8d85f76f363d6b4bf8d9f03dcb.svg" alt="The Movie Database API" width="100">
+                </a>
+                <p style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">
+                    This product uses the TMDB API but is not endorsed or certified by TMDB.
+                </p>
+            </div>
+            <nav style="margin-top: 20px;">
                 <a href="privacy.html">Privacy Policy</a>
                 <a href="terms.html">Terms & Conditions</a>
                 <a href="contact.html">Contact Us</a>
@@ -339,6 +334,24 @@
         </footer>
     </div>
     
+    <div class="modal-overlay" id="details-modal">
+        <div class="modal">
+            <span class="modal-close" id="modal-close-btn">&times;</span>
+            <div id="modal-loader"><i class="fas fa-spinner fa-spin"></i> &nbsp; Loading...</div>
+            <div id="modal-content">
+                <div class="modal-header">
+                    <iframe class="modal-trailer" id="modal-trailer" allowfullscreen></iframe>
+                </div>
+                <div class="modal-body">
+                    <h2 class="modal-title" id="modal-title"></h2>
+                    <div class="modal-genres" id="modal-genres"></div>
+                    <p class="modal-overview" id="modal-overview"></p>
+                    <a id="modal-tmdb-link" class="tmdb-link" href="#" target="_blank" rel="noopener noreferrer">View full details on TMDB</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchBtn = document.getElementById('search-btn');
@@ -363,6 +376,11 @@
         let totalApiPages = 1;
         const activeFilters = new Set();
 
+        const modalOverlay = document.getElementById('details-modal');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalLoader = document.getElementById('modal-loader');
+        const modalContent = document.getElementById('modal-content');
+        
         async function searchEntertainment(query, isNewSearch = true) {
             if (isNewSearch) {
                 currentPage = 1;
@@ -438,8 +456,10 @@
         function displayMoreResults() {
             const resultsToShow = allFetchedResults.slice(displayedResultsCount, displayedResultsCount + RESULTS_PER_LOAD);
             resultsToShow.forEach((item) => {
-                const card = document.createElement('div');
+                const card = document.createElement('button');
                 card.className = 'card';
+                card.dataset.id = item.id;
+                card.dataset.type = item.type;
                 card.innerHTML = `
                     <div class="card-header">
                         <img src="${item.poster}" alt="Poster for ${item.title}" class="poster" loading="lazy">
@@ -538,6 +558,72 @@
         window.addEventListener('click', (e) => {
             if (mainNav && !mainNav.contains(e.target)) {
                 mainNav.classList.remove('show');
+            }
+        });
+
+        async function openDetailsModal(id, type) {
+            modalOverlay.classList.add('show');
+            document.body.classList.add('modal-open');
+            modalLoader.style.display = 'flex';
+            modalContent.style.display = 'none';
+
+            const detailsUrl = `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}&append_to_response=videos`;
+            
+            try {
+                const response = await fetch(detailsUrl);
+                const data = await response.json();
+
+                document.getElementById('modal-title').textContent = data.name || data.title;
+                document.getElementById('modal-overview').textContent = data.overview || "No summary available.";
+                
+                const genresContainer = document.getElementById('modal-genres');
+                genresContainer.innerHTML = '';
+                data.genres.slice(0, 4).forEach(genre => {
+                    const genreTag = document.createElement('span');
+                    genreTag.className = 'genre-tag';
+                    genreTag.textContent = genre.name;
+                    genresContainer.appendChild(genreTag);
+                });
+
+                const trailer = data.videos.results.find(video => video.site === 'YouTube' && video.type === 'Trailer');
+                const trailerFrame = document.getElementById('modal-trailer');
+                if (trailer) {
+                    trailerFrame.src = `https://www.youtube.com/embed/${trailer.key}`;
+                    trailerFrame.parentElement.style.display = 'block';
+                } else {
+                    trailerFrame.parentElement.style.display = 'none';
+                }
+
+                document.getElementById('modal-tmdb-link').href = `https://www.themoviedb.org/${type}/${id}`;
+
+                modalLoader.style.display = 'none';
+                modalContent.style.display = 'block';
+
+            } catch (error) {
+                console.error("Failed to fetch details:", error);
+                closeDetailsModal();
+            }
+        }
+
+        function closeDetailsModal() {
+            modalOverlay.classList.remove('show');
+            document.body.classList.remove('modal-open');
+            document.getElementById('modal-trailer').src = '';
+        }
+
+        resultsContainer.addEventListener('click', (e) => {
+            const card = e.target.closest('.card');
+            if (card) {
+                const id = card.dataset.id;
+                const type = card.dataset.type;
+                openDetailsModal(id, type);
+            }
+        });
+
+        modalCloseBtn.addEventListener('click', closeDetailsModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeDetailsModal();
             }
         });
 
