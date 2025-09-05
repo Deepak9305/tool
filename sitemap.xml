@@ -15,5 +15,20 @@
       <lastmod>2025-09-05</lastmod>
       <priority>0.8</priority>
    </url>
+   <url>
+      <loc>https://www.pickmybinge.com/privacy.html</loc>
+      <lastmod>2025-09-05</lastmod>
+      <priority>0.6</priority>
+   </url>
+   <url>
+      <loc>https://www.pickmybinge.com/contact.html</loc>
+      <lastmod>2025-09-05</lastmod>
+      <priority>0.6</priority>
+   </url>
+   <url>
+      <loc>https://www.pickmybinge.com/terms.html</loc>
+      <lastmod>2025-09-05</lastmod>
+      <priority>0.6</priority>
+   </url>
 </urlset>
-```
+
