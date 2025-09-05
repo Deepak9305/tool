@@ -1,6 +1,17 @@
-Allow all web crawlers access to all content
+START ROBOTS.TXT FOR PICKMYBINGE.COM
+This file tells search engine bots which pages they are allowed to crawl.
+We want all search engines to be able to crawl the entire site,
+as all pages are public and valuable.
 User-agent: *
 Disallow:
 
-Specify the location of the sitemap for all crawlers
+The following rule is a specific instruction for Google's main crawler.
+We are also allowing it full access to ensure it can render all pages correctly.
+User-agent: Googlebot
+Disallow:
+
+Location of the sitemap file.
+This is one of the most important lines, as it helps bots discover all your pages.
 Sitemap: https://www.google.com/search?q=https://www.pickmybinge.com/sitemap.xml
+
+END ROBOTS.TXT
