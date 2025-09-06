@@ -1,17 +1,12 @@
-START ROBOTS.TXT FOR PICKMYBINGE.COM
-This file tells search engine bots which pages they are allowed to crawl.
-We want all search engines to be able to crawl the entire site,
-as all pages are public and valuable.
+# robots.txt for pickmybinge.com
+# Allow all search engines to crawl everything
+
 User-agent: *
 Disallow:
 
-The following rule is a specific instruction for Google's main crawler.
-We are also allowing it full access to ensure it can render all pages correctly.
+# Specific rule for Googlebot (also full access)
 User-agent: Googlebot
 Disallow:
 
-Location of the sitemap file.
-This is one of the most important lines, as it helps bots discover all your pages.
-Sitemap: https://www.google.com/search?q=https://www.pickmybinge.com/sitemap.xml
-
-END ROBOTS.TXT
+# Location of the sitemap
+Sitemap: https://www.pickmybinge.com/sitemap.xml
